@@ -21,3 +21,4 @@ if(NOT googletest_POPULATED)
 endif()
 
 add_subdirectory(src)
+add_subdirectory(website)

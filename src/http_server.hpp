@@ -9,7 +9,11 @@ class HttpServer : public QObject {
  public:
   HttpServer();
 
-  QString serveLanding();
+  QString servePageFromResource(QString page);
+  QString postScript(const QHttpServerRequest &request);
+
+ signals:
+  void animationSelected(QString animation);
 
  private:
   QHttpServer server_;

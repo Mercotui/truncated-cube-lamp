@@ -9,7 +9,20 @@ constexpr int kHttpPort = 8080;
 }  // namespace
 
 HttpServer::HttpServer() {
-  server_.route("/", [&]() { return serveLanding(); });
+  Q_INIT_RESOURCE(website);
+
+  // serve all website files
+  QDir website_resource_dir(":/website/");
+  for (const auto page : website_resource_dir.entryList()) {
+    qCInfo(HttpServerLog) << "Registering page" << page;
+    server_.route(QString("/") + page,
+                  [&, page = page]() { return servePageFromResource(page); });
+  }
+
+  server_.route("/", [&]() { return servePageFromResource("index.html"); });
+  server_.route("/script", [&](const QHttpServerRequest &request) {
+    return postScript(request);
+  });
 
   const auto port = server_.listen(QHostAddress::Any, kHttpPort);
   if (port != kHttpPort) {
@@ -18,11 +31,24 @@ HttpServer::HttpServer() {
   }
 }
 
-QString HttpServer::serveLanding() {
-  qCInfo(HttpServerLog) << "Serving /";
+QString HttpServer::servePageFromResource(QString page) {
+  QString content;
+  QFile page_file(page.prepend(":/website/"));
+  if (page_file.open(QFile::ReadOnly | QFile::Text)) {
+    qCInfo(HttpServerLog) << "Serving" << page;
+    QTextStream file_stream(&page_file);
+    content = file_stream.readAll();
+  } else {
+    qCCritical(HttpServerLog) << "Tried to serve unregsitered page" << page;
+    content = "Internal server error";
+  }
+  return content;
+}
 
-  return "<!DOCTYPE html><html lang=\"en\" dir=\"ltr\"><head><meta "
-         "charset=\"utf-8\"><title>Truncated "
-         "Cube</title></head><body><h1>Truncated Cube Lamp</h1>This is the "
-         "landing page!</body></html>";
+QString HttpServer::postScript(const QHttpServerRequest &request) {
+  QString animation_script = request.body();
+  qCCritical(HttpServerLog) << animation_script;
+  emit animationSelected(animation_script);
+
+  return animation_script;
 }
