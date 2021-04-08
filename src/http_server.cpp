@@ -50,5 +50,5 @@ QString HttpServer::postScript(const QHttpServerRequest &request) {
   qCCritical(HttpServerLog) << animation_script;
   emit animationSelected(animation_script);
 
-  return animation_script;
+  return "";
 }
