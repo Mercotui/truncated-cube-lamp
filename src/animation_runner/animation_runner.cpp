@@ -1,5 +1,7 @@
 #include "animation_runner.hpp"
 
+#include <utility>
+
 AnimationRunner::AnimationRunner(
     std::unique_ptr<ScreenControllerInterface> screen_controller)
     : screen_(std::move(screen_controller)) {

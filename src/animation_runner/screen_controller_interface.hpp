@@ -2,6 +2,7 @@
 
 #include <QColor>
 #include <QSize>
+#include <vector>
 
 class ScreenControllerInterface {
  public:

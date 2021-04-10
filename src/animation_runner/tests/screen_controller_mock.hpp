@@ -1,3 +1,7 @@
+#pragma once
+
+#include <vector>
+
 #include "../screen_controller_interface.hpp"
 #include "gmock/gmock.h"
 

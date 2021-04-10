@@ -9,7 +9,8 @@
 class AnimationRunner : public QObject {
   Q_OBJECT
  public:
-  AnimationRunner(std::unique_ptr<ScreenControllerInterface> screen_controller);
+  explicit AnimationRunner(
+      std::unique_ptr<ScreenControllerInterface> screen_controller);
 
   void run(QString animation_script);
   QSize getResolution();

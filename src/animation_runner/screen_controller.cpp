@@ -2,7 +2,7 @@
 
 #include <QLoggingCategory>
 
-#include "ws2811.h"
+#include "./ws2811.h"
 
 namespace {
 constexpr int kScreenWidth = 8;
