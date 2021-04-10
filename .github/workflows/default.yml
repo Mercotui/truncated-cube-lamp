@@ -1,0 +1,22 @@
+
+name: Articated CI
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/mercotui/derpicated-articated-ci-container:latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install pre-commit
+      run: pipx install pre-commit
+
+    - name: Run pre-commit
+      run: PATH=/github/home/.local/bin:$PATH pre-commit run --all-files
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/pre-commit
+        key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
