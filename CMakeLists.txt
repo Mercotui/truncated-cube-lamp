@@ -5,6 +5,7 @@ project(truncated_cube_lamp VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+enable_testing()
 include(FetchContent)
 
 FetchContent_Declare(
@@ -29,6 +30,7 @@ FetchContent_GetProperties(rpi_ws281x)
 if(NOT rpi_ws281x_POPULATED)
   message("Downloading rpi_ws281x")
   FetchContent_Populate(rpi_ws281x)
+  set(BUILD_TEST OFF)
   add_subdirectory(${rpi_ws281x_SOURCE_DIR} ${rpi_ws281x_BINARY_DIR})
   include_directories(${rpi_ws281x_SOURCE_DIR}/include ${rpi_ws281x_SOURCE_DIR})
 endif()
