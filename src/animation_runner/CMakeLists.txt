@@ -8,4 +8,4 @@ add_library(animation_runner STATIC
   screen_controller.cpp
 )
 
-target_link_libraries(animation_runner Qt::Core Qt::Gui Qt::Qml)
+target_link_libraries(animation_runner ws2811 Qt::Core Qt::Gui Qt::Qml)

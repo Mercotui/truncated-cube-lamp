@@ -20,5 +20,18 @@ if(NOT googletest_POPULATED)
   include_directories(${googletest_SOURCE_DIR}/include ${googletest_SOURCE_DIR})
 endif()
 
+FetchContent_Declare(
+  rpi_ws281x
+  GIT_REPOSITORY https://github.com/jgarff/rpi_ws281x.git
+)
+FetchContent_GetProperties(rpi_ws281x)
+
+if(NOT rpi_ws281x_POPULATED)
+  message("Downloading rpi_ws281x")
+  FetchContent_Populate(rpi_ws281x)
+  add_subdirectory(${rpi_ws281x_SOURCE_DIR} ${rpi_ws281x_BINARY_DIR})
+  include_directories(${rpi_ws281x_SOURCE_DIR}/include ${rpi_ws281x_SOURCE_DIR})
+endif()
+
 add_subdirectory(src)
 add_subdirectory(website)
