@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "screen_controller_interface.hpp"
+#include "screen_interface_js.hpp"
 
 class AnimationRunner : public QObject {
   Q_OBJECT
@@ -17,5 +18,6 @@ class AnimationRunner : public QObject {
 
  private:
   QJSEngine engine_;
+  ScreenInterfaceJs screen_interface_js_;
   std::unique_ptr<ScreenControllerInterface> screen_;
 };
