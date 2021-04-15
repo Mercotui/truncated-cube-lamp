@@ -11,22 +11,13 @@ class ScreenInterfaceJs : public QObject {
   Q_PROPERTY(QSize resolution MEMBER resolution_ CONSTANT)
 
  public:
-  explicit ScreenInterfaceJs(QSize resolution, QObject* parent = nullptr)
-      : pixels_(resolution.width() * resolution.width(), "black"),
-        test_(resolution.width() * resolution.width(), 12),
-        resolution_(resolution),
-        QObject(parent) {}
-
-  const std::vector<QColor>& pixels() { return pixels_; }
+  explicit ScreenInterfaceJs(QSize resolution, QObject* parent = nullptr);
+  const std::vector<QColor>& pixels();
 
  public slots:
-  void setPixel(const int x, const int y, QColor color) {
-    pixels_[(x * resolution_.width()) + y] = color;
-  }
+  void setPixel(const int x, const int y, QColor color);
 
-  QColor getPixel(const int x, const int y) {
-    return pixels_[(x * resolution_.width()) + y];
-  }
+  QColor getPixel(const int x, const int y);
 
  signals:
   void draw();
@@ -35,4 +26,6 @@ class ScreenInterfaceJs : public QObject {
   QVector<int> test_;
   std::vector<QColor> pixels_;
   QSize resolution_;
+
+  int wrapCoordinates(const int x, const int y);
 };
