@@ -73,7 +73,11 @@
 
     setPixel: function (x, y, color){
       this.pixels[(y * this.emulated_width) + x] = color;
-    }
+    },
+
+    clear: function () {
+      this.pixels.fill("black");
+    },
   };
 
   export default {
@@ -84,16 +88,22 @@
     },
 
     mounted: function () {
+      // initial setup once the DOM is completed
       this.$nextTick(function () {
         lamp_renderer.init();
-
-        // temp test!
-        lamp_renderer.setPixel(0, 0, "red");
-        lamp_renderer.setPixel(2, 5, "green");
-        lamp_renderer.setPixel(6, 6, "blue");
-        lamp_renderer.draw();
-
       })
+    },
+
+    run: function (animation_script) {
+        lamp_renderer.clear();
+
+        try {
+          var animation_func = Function('screen', '"use strict";' + animation_script);
+          animation_func(lamp_renderer);
+        } catch(err) {
+          // TODO: add this to the UI?
+          console.log(err.toString())
+        }
     },
   }
 </script>

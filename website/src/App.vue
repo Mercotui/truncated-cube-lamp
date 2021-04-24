@@ -27,8 +27,15 @@
     </v-app-bar>
 
     <v-main>
-      <CodeEditor/>
+      <v-row class="text-center">
+        <v-col class="mb-4">
+          <h1 class="display-2 font-weight-bold mb-3">
+            Welcome to Truncated Cube Lamp
+          </h1>
+        </v-col>
+      </v-row>
 
+      <CodeEditor @runInEmulator="runInEmulator" />
       <LampEmulator/>
     </v-main>
   </v-app>
@@ -49,5 +56,11 @@ export default {
   data: () => ({
     //
   }),
+
+  methods: {
+    runInEmulator: function (animation_script) {
+      LampEmulator.run(animation_script)
+    }
+  },
 };
 </script>
