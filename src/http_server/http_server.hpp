@@ -1,20 +1,20 @@
 #pragma once
 
 #include <QtHttpServer/QtHttpServer>
+#include <memory>
+
+#include "scripts_api.hpp"
 
 Q_DECLARE_LOGGING_CATEGORY(HttpServerLog)
 
 class HttpServer : public QObject {
   Q_OBJECT
  public:
-  HttpServer();
+  explicit HttpServer(std::unique_ptr<ScriptsApi> scripts_api);
 
   QString servePageFromResource(QString page);
-  QString postScript(const QHttpServerRequest &request);
-
- signals:
-  void animationSelected(QString animation);
 
  private:
   QHttpServer server_;
+  std::unique_ptr<ScriptsApi> scripts_api_;
 };

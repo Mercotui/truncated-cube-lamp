@@ -1,6 +1,7 @@
 #include "http_server.hpp"
 
-#include <QLoggingCategory>
+#include <QtCore/QLoggingCategory>
+#include <utility>
 
 Q_LOGGING_CATEGORY(HttpServerLog, "http.server", QtInfoMsg)
 
@@ -8,7 +9,8 @@ namespace {
 constexpr int kHttpPort = 8080;
 }  // namespace
 
-HttpServer::HttpServer() {
+HttpServer::HttpServer(std::unique_ptr<ScriptsApi> scripts_api)
+    : scripts_api_(std::move(scripts_api)) {
   Q_INIT_RESOURCE(website);
 
   // serve all website files
@@ -20,9 +22,7 @@ HttpServer::HttpServer() {
   }
 
   server_.route("/", [&]() { return servePageFromResource("index.html"); });
-  server_.route("/script", [&](const QHttpServerRequest &request) {
-    return postScript(request);
-  });
+  scripts_api_->registerApi(server_);
 
   const auto port = server_.listen(QHostAddress::Any, kHttpPort);
   if (port != kHttpPort) {
@@ -43,12 +43,4 @@ QString HttpServer::servePageFromResource(QString page) {
     content = "Internal server error";
   }
   return content;
-}
-
-QString HttpServer::postScript(const QHttpServerRequest &request) {
-  QString animation_script = request.body();
-  qCCritical(HttpServerLog) << animation_script;
-  emit animationSelected(animation_script);
-
-  return "";
 }
