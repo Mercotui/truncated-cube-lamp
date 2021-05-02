@@ -6,6 +6,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 add_library(http_server STATIC
   http_server.cpp
   scripts_api.cpp
+  runner_api.cpp
   scripts_cache.cpp
 )
 

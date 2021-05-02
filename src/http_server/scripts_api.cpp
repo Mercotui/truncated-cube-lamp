@@ -3,13 +3,10 @@
 #include <QtCore/QLoggingCategory>
 #include <utility>
 
-Q_LOGGING_CATEGORY(ScriptsApiLog, "http.api", QtInfoMsg)
+Q_LOGGING_CATEGORY(ScriptsApiLog, "http.api.scripts", QtInfoMsg)
 
-ScriptsApi::ScriptsApi(std::unique_ptr<ScriptsCache> cache,
-                       const QSize& screen_resolution, QObject* parent)
-    : QObject(parent),
-      cache_(std::move(cache)),
-      screen_resolution_(screen_resolution) {}
+ScriptsApi::ScriptsApi(std::shared_ptr<ScriptsCache> cache, QObject* parent)
+    : QObject(parent), cache_(cache) {}
 
 void ScriptsApi::registerApi(QHttpServer* server) {
   server->route("/api", [&](const QHttpServerRequest& request) {

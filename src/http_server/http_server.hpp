@@ -3,6 +3,7 @@
 #include <QtHttpServer/QtHttpServer>
 #include <memory>
 
+#include "runner_api.hpp"
 #include "scripts_api.hpp"
 
 Q_DECLARE_LOGGING_CATEGORY(HttpServerLog)
@@ -10,11 +11,15 @@ Q_DECLARE_LOGGING_CATEGORY(HttpServerLog)
 class HttpServer : public QObject {
   Q_OBJECT
  public:
-  explicit HttpServer(std::unique_ptr<ScriptsApi> scripts_api);
+  explicit HttpServer(std::unique_ptr<ScriptsApi> scripts_api,
+                      std::unique_ptr<RunnerApi> runner_api);
 
-  QString servePageFromResource(QString page);
+  QHttpServerResponse servePageFromResource(const QString page);
 
  private:
+  void registerWebsiteFiles();
+
   QHttpServer server_;
   std::unique_ptr<ScriptsApi> scripts_api_;
+  std::unique_ptr<RunnerApi> runner_api_;
 };

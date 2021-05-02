@@ -10,8 +10,8 @@
 class ScriptsApi : public QObject {
   Q_OBJECT
  public:
-  ScriptsApi(std::unique_ptr<ScriptsCache> cache,
-             const QSize& screen_resolution, QObject* parent = nullptr);
+  explicit ScriptsApi(std::shared_ptr<ScriptsCache> cache,
+                      QObject* parent = nullptr);
 
   void registerApi(QHttpServer* server);
 
@@ -21,6 +21,5 @@ class ScriptsApi : public QObject {
   void animationSelected(QString animation);
 
  private:
-  std::unique_ptr<ScriptsCache> cache_;
-  QSize screen_resolution_;
+  std::shared_ptr<ScriptsCache> cache_;
 };
