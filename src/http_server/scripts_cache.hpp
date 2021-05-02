@@ -12,7 +12,9 @@ class ScriptsCache {
   void add(const QString& name, const QString& script);
   void remove(const QString& name);
 
-  std::optional<QString> get(const QString& name);
+  bool has(const QString& name) const;
+  std::optional<QString> get(const QString& name) const;
+  QList<QString> getNames() const;
 
  private:
   QHash<QString, QString> scripts_;

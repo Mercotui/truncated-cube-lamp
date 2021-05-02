@@ -15,11 +15,12 @@ class ScriptsApi : public QObject {
 
   void registerApi(QHttpServer* server);
 
-  QString postScript(const QHttpServerRequest& request);
-
- signals:
-  void animationSelected(QString animation);
+  QJsonObject handleRoot();
+  QHttpServerResponse handleScriptGet(const QString& name);
+  QHttpServerResponse handleScriptDelete(const QString& name);
+  QHttpServerResponse handleScriptPut(const QString& name,
+                                      const QHttpServerRequest& request);
 
  private:
-  std::shared_ptr<ScriptsCache> cache_;
+  std::shared_ptr<ScriptsCache> scripts_cache_;
 };

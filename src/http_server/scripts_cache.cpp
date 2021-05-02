@@ -31,7 +31,11 @@ void ScriptsCache::remove(const QString& name) {
   }
 }
 
-std::optional<QString> ScriptsCache::get(const QString& name) {
+bool ScriptsCache::has(const QString& name) const {
+  return scripts_.find(name) != scripts_.cend();
+}
+
+std::optional<QString> ScriptsCache::get(const QString& name) const {
   if (auto iter = scripts_.find(name); iter != scripts_.end()) {
     return iter.value();
   } else {
@@ -39,3 +43,5 @@ std::optional<QString> ScriptsCache::get(const QString& name) {
     return std::nullopt;
   }
 }
+
+QList<QString> ScriptsCache::getNames() const { return scripts_.keys(); }

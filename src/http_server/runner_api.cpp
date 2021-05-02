@@ -15,8 +15,8 @@ RunnerApi::RunnerApi(std::shared_ptr<ScriptsCache> cache,
       screen_resolution_(screen_resolution) {}
 
 void RunnerApi::registerApi(QHttpServer* server) {
-  server->route("/runner/", [this]() { return handleInfo(); });
-  server->route("/runner/run/", [this](const QHttpServerRequest& request) {
+  server->route("/api/runner/", [this]() { return handleInfo(); });
+  server->route("/api/runner/run/", [this](const QHttpServerRequest& request) {
     return handleRun(request);
   });
 }
@@ -36,7 +36,9 @@ QHttpServerResponse RunnerApi::handleRun(const QHttpServerRequest& request) {
   auto request_json = QJsonDocument::fromJson(request.body(), &parsing_status);
 
   if (parsing_status.error != QJsonParseError::NoError) {
-    response.setObject(QJsonObject({{"error", "malformed request JSON"}}));
+    auto error_message = QString("malformed request JSON: \"%1\"")
+                             .arg(parsing_status.errorString());
+    response.setObject(QJsonObject({{"error", error_message}}));
     http_status = StatusCode::BadRequest;
   } else {
     auto name_object = request_json["name"];
