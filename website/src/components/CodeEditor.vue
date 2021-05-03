@@ -25,9 +25,14 @@
 </template>
 
 <script>
+import axios from 'axios';
+import base64 from 'base-64';
+import utf8 from 'utf8';
+
   export default {
     data() {
       return {
+        script_name: "test",
         content: "screen.setPixel(0, 0, 'red');\nscreen.setPixel(2, 5, 'green');\nscreen.setPixel(6, 6, 'blue');\nscreen.draw();",
       }
     },
@@ -52,7 +57,12 @@
       },
 
       save: function () {
-        console.log("Save Test Log");
+        var bytes = utf8.encode(this.content);
+        var encoded_script = base64.encode(bytes);
+
+        axios.put('/api/scripts/test/', {
+          script: encoded_script
+        });
       },
 
       runInEmulator: function () {

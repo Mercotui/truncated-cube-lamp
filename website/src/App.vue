@@ -35,6 +35,7 @@
         </v-col>
       </v-row>
 
+      <ScriptsList/>
       <CodeEditor @runInEmulator="runInEmulator" />
       <LampEmulator/>
     </v-main>
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import ScriptsList from './components/ScriptsList';
 import CodeEditor from './components/CodeEditor';
 import LampEmulator from './components/LampEmulator';
 
@@ -49,6 +51,7 @@ export default {
   name: 'App',
 
   components: {
+    ScriptsList,
     CodeEditor,
     LampEmulator,
   },
