@@ -5,12 +5,24 @@
         <p class="subheading font-weight-regular">
           heya
         </p>
-        <v-btn elevation="2" v-on:click="save">
-          Save
-        </v-btn>
-        <v-btn elevation="2" v-on:click="runInEmulator">
-          Run in Emulator
-        </v-btn>
+        <v-btn elevation="2" v-on:click="save">Save</v-btn>
+        <v-btn elevation="2" v-on:click="overlay_opened = true">Save As</v-btn>
+        <v-btn elevation="2" v-on:click="runInEmulator">Run in Emulator</v-btn>
+
+        <v-overlay :value="overlay_opened">
+          <v-card class="mx-auto my-12" max-width="374">
+            <v-card-title>Enter Script Name</v-card-title>
+            <v-text-field label="Script Name" v-model="script_name" solo></v-text-field>
+            <v-card-actions>
+              <v-btn color="primary" @click="overlay_opened = false">
+                Cancel
+              </v-btn>
+              <v-btn color="success" @click="saveAs">
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-overlay>
 
 
         <div class="container" style="display: flex; flex: 1;">
@@ -32,9 +44,13 @@ import utf8 from 'utf8';
   export default {
     data() {
       return {
-        script_name: "test",
+        overlay_opened: false,
         content: "screen.setPixel(0, 0, 'red');\nscreen.setPixel(2, 5, 'green');\nscreen.setPixel(6, 6, 'blue');\nscreen.draw();",
       }
+    },
+
+    props: {
+      script_name: String
     },
 
     components: {
@@ -60,9 +76,14 @@ import utf8 from 'utf8';
         var bytes = utf8.encode(this.content);
         var encoded_script = base64.encode(bytes);
 
-        axios.put('/api/scripts/test/', {
+        axios.put('/api/scripts/' + this.script_name + '/', {
           script: encoded_script
         });
+      },
+
+      saveAs: function () {
+        this.overlay_opened = false;
+        this.save();
       },
 
       runInEmulator: function () {

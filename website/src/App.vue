@@ -1,10 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
+    <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
         <v-img
           alt="Vuetify Logo"
@@ -27,43 +23,16 @@
     </v-app-bar>
 
     <v-main>
-      <v-row class="text-center">
-        <v-col class="mb-4">
-          <h1 class="display-2 font-weight-bold mb-3">
-            Welcome to Truncated Cube Lamp
-          </h1>
-        </v-col>
-      </v-row>
-
-      <ScriptsList/>
-      <CodeEditor @runInEmulator="runInEmulator" />
-      <LampEmulator/>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import ScriptsList from './components/ScriptsList';
-import CodeEditor from './components/CodeEditor';
-import LampEmulator from './components/LampEmulator';
 
 export default {
   name: 'App',
-
-  components: {
-    ScriptsList,
-    CodeEditor,
-    LampEmulator,
-  },
-
-  data: () => ({
-    //
-  }),
-
-  methods: {
-    runInEmulator: function (animation_script) {
-      LampEmulator.run(animation_script)
-    }
-  },
 };
 </script>
