@@ -65,7 +65,7 @@ QHttpServerResponse HttpServer::servePageFromResource(const QString file) {
 
   // qt sets a stupid content type for HTML files 🙄
   if (response.mimeType() == "application/x-extension-html") {
-    response = QHttpServerResponse("text/html", response.data());
+    return QHttpServerResponse("text/html", response.data());
   }
 
   return response;

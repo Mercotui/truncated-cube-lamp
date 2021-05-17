@@ -4,7 +4,8 @@ Testing a cool idea for a lamp
 
 ## Build
 
-Get, make and install [QtHttpServer](https://code.qt.io/qt-extensions/qthttpserver.git).
+Get, make and install [QtHttpServer](https://code.qt.io/qt-extensions/qthttpserver.git),
+the `5.15` branch.
 
 Qt 6 doesn't detect its code build tools,
 and HttpServer needs to be manually specified if you use a different install prefix:

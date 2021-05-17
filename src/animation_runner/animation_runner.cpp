@@ -1,5 +1,6 @@
 #include "animation_runner.hpp"
 
+#include <QDebug>
 #include <utility>
 
 AnimationRunner::AnimationRunner(

@@ -7,6 +7,7 @@
 using StatusCode = QHttpServerResponse::StatusCode;
 
 Q_LOGGING_CATEGORY(RunnerApiLog, "http.api.runner", QtInfoMsg)
+Q_DECLARE_METATYPE(QJsonValue::Type)
 
 RunnerApi::RunnerApi(std::shared_ptr<ScriptsCache> cache,
                      const QSize& screen_resolution, QObject* parent)

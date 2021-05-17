@@ -7,6 +7,7 @@ using StatusCode = QHttpServerResponse::StatusCode;
 using Method = QHttpServerRequest::Method;
 
 Q_LOGGING_CATEGORY(ScriptsApiLog, "http.api.scripts", QtInfoMsg)
+Q_DECLARE_METATYPE(QJsonValue::Type)
 
 ScriptsApi::ScriptsApi(std::shared_ptr<ScriptsCache> cache, QObject* parent)
     : QObject(parent), scripts_cache_(cache) {}
