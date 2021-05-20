@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "../screen_controller_interface.hpp"
 #include "gmock/gmock.h"
+#include "screen_controller_interface.hpp"
 
 class ScreenControllerMock : public ScreenControllerInterface {
  public:

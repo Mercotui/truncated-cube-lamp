@@ -14,3 +14,4 @@ target_link_libraries(truncated_cube_lamp animation_runner http_server
 
 add_subdirectory(animation_runner)
 add_subdirectory(http_server)
+add_subdirectory(screen)

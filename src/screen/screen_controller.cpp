@@ -8,12 +8,22 @@ namespace {
 constexpr int kScreenWidth = 8;
 constexpr int kScreenHeight = 8;
 constexpr int kPixelCount = kScreenWidth * kScreenHeight;
+constexpr int kGpioPin = 10;  // SPI MOSI
+constexpr int kLedStripType = SK6812_STRIP;
+constexpr uint8_t kBrightness = 128;  // half brightness is more than blinding
 }  // namespace
 
 Q_LOGGING_CATEGORY(ScreenControllerLog, "animation.screen", QtInfoMsg)
 
 ScreenController::ScreenController()
     : led_panel_(std::make_unique<ws2811_t>()) {
+  // configure panel
+  led_panel_->channel[0].count = kPixelCount;
+  led_panel_->channel[0].gpionum = kGpioPin;
+  led_panel_->channel[0].strip_type = kLedStripType;
+  led_panel_->channel[0].brightness = kBrightness;
+
+  // try to initialize panel
   if (const ws2811_return_t status = ws2811_init(led_panel_.get());
       status != WS2811_SUCCESS) {
     led_panel_.reset();

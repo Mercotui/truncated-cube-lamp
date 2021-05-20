@@ -2,11 +2,11 @@
 #include <QtCore/QtCore>
 
 #include "animation_runner/animation_runner.hpp"
-#include "animation_runner/screen_controller.hpp"
 #include "http_server/http_server.hpp"
 #include "http_server/runner_api.hpp"
 #include "http_server/scripts_api.hpp"
 #include "http_server/scripts_cache.hpp"
+#include "screen/screen_controller.hpp"
 
 int main(int argc, char **argv) {
   QCoreApplication app(argc, argv);
