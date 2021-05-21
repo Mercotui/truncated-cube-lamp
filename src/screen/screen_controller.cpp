@@ -11,6 +11,7 @@ constexpr int kPixelCount = kScreenWidth * kScreenHeight;
 constexpr int kGpioPin = 10;  // SPI MOSI
 constexpr int kLedStripType = SK6812_STRIP;
 constexpr uint8_t kBrightness = 128;  // half brightness is more than blinding
+
 }  // namespace
 
 Q_LOGGING_CATEGORY(ScreenControllerLog, "animation.screen", QtInfoMsg)
@@ -46,8 +47,8 @@ void ScreenController::draw(const std::vector<QColor>& pixels) {
         << "Driver wait:" << ws2811_get_return_t_str(status);
   }
 
-  for (const auto& pixel : pixels) {
-    qCDebug(ScreenControllerLog) << pixel;
+  for (int idx = pixels.size() - 1; idx >= 0; --idx) {
+    led_panel_->channel[0].leds[idx] = pixels[idx].rgb();
   }
 
   if (const ws2811_return_t status = ws2811_render(led_panel_.get());
