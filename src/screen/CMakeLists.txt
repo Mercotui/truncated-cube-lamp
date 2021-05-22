@@ -9,3 +9,7 @@ add_library(screen STATIC
 
 target_include_directories(screen INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(screen ws2811 Qt::Core Qt::Gui)
+
+IF(BUILD_SCREEN_TEST)
+  add_subdirectory(test)
+ENDIF()
