@@ -7,6 +7,7 @@
 namespace {
 constexpr int kScreenWidth = 8;
 constexpr int kScreenHeight = 8;
+constexpr int kDmaNumber = 10;
 constexpr int kPixelCount = kScreenWidth * kScreenHeight;
 constexpr int kGpioPin = 10;  // SPI MOSI
 constexpr int kLedStripType = SK6812_STRIP;
@@ -18,11 +19,16 @@ Q_LOGGING_CATEGORY(ScreenControllerLog, "animation.screen", QtInfoMsg)
 
 ScreenController::ScreenController()
     : led_panel_(std::make_unique<ws2811_t>()) {
-  // configure panel
+  // configure driver
+  led_panel_->freq = WS2811_TARGET_FREQ;
+  led_panel_->dmanum = kDmaNumber;
+  memset(led_panel_->channel, 0, sizeof(ws2811_channel_t) * RPI_PWM_CHANNELS);
+  // configure led matrix
   led_panel_->channel[0].count = kPixelCount;
   led_panel_->channel[0].gpionum = kGpioPin;
   led_panel_->channel[0].strip_type = kLedStripType;
   led_panel_->channel[0].brightness = kBrightness;
+  led_panel_->channel[0].invert = 0;
 
   // try to initialize panel
   if (const ws2811_return_t status = ws2811_init(led_panel_.get());
