@@ -4,7 +4,7 @@
 #include <utility>
 
 namespace {
-constexpr int kScreenPreviewYOffset = 5;
+constexpr int kScreenPreviewYOffset = 4;
 }  // namespace
 
 UserInterface::UserInterface() {
@@ -13,6 +13,7 @@ UserInterface::UserInterface() {
   curs_set(0);            // set cursor invsible
   noecho();               // dont echo input
   nodelay(stdscr, TRUE);  // set getch to be non-blocking
+  keypad(stdscr, TRUE);   // enable arrow keys
 }
 
 UserInterface::~UserInterface() { endwin(); }
@@ -39,12 +40,7 @@ UserInterface::Button UserInterface::getButtonPress() {
     case 'd':
       return Button::kDraw;
     case 'q':
-    case 0x1B:  // escape
-      // check if escape was not part of escape sequence
-      if (wgetch(stdscr) == ERR) {
-        return Button::kExit;
-      }
-      break;
+      return Button::kExit;
     default:
       break;
   }
@@ -58,13 +54,14 @@ void UserInterface::draw(const unsigned pixel_value, const int coord_x,
   attron(A_BOLD);
   printw("SCREEN CONTROLLER TEST\n");
   attroff(A_BOLD);
+  printw(" Commands:\t Quit(q) Draw(d) RGB(rgb or 123) Navigate(arrow keys)\n");
   printw(" Resolution:\t%d by %d\n", res_x, res_y);
   printw(" Selected:\t(%d , %d )=%06x\n", coord_x, coord_y, pixel_value);
   printw(" Screen Preview:\n");
   for (int x = 0; x < res_x; ++x) {
     for (int y = 0; y < res_y; ++y) {
-      mvprintw(kScreenPreviewYOffset + y, x, ".");
+      mvprintw(kScreenPreviewYOffset + res_y - y, x, ".");
     }
   }
-  mvprintw(kScreenPreviewYOffset + coord_y, coord_x, "X");
+  mvprintw(kScreenPreviewYOffset + res_y - coord_y, coord_x, "X");
 }

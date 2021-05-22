@@ -22,12 +22,12 @@ void changeCoordinates(const Button button, QPoint* coordinates,
     }
     case Button::kLeft: {
       coordinates->setX(
-          std::clamp(coordinates->x() + 1, 0, resolution.width() - 1));
+          std::clamp(coordinates->x() - 1, 0, resolution.width() - 1));
       break;
     }
     case Button::kRight: {
       coordinates->setX(
-          std::clamp(coordinates->x() - 1, 0, resolution.width() - 1));
+          std::clamp(coordinates->x() + 1, 0, resolution.width() - 1));
       break;
     }
     default: { break; }
