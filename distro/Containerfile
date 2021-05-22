@@ -1,0 +1,29 @@
+from ubuntu:20.04
+
+# prevent stupid interaction
+ARG DEBIAN_FRONTEND=noninteractive
+
+# install yocto's build dependencies
+run apt-get update && apt-get install -y gawk wget git diffstat unzip texinfo gcc build-essential chrpath socat cpio python3 python-is-python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev
+
+# install additional dependencies
+run apt-get update && apt-get install -y git-lfs curl locales locales-all vim
+
+#setup locale
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
+# install google's stupidly named "repo" tool
+run curl https://storage.googleapis.com/git-repo-downloads/repo > /bin/repo && chmod a+rx /bin/repo
+
+# switch to a non-root build-user
+RUN useradd --create-home --shell /bin/bash --uid 1001 yoctohost
+USER yoctohost
+WORKDIR /home/yoctohost
+
+# setup a git user to stop "repo" from complaining
+run git config --global user.name "yoctohost" && git config --global user.email "mennovandergraaf@hotmail.com"
+
+# add yocto build script
+COPY distro-*.sh ./
