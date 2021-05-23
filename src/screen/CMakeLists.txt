@@ -5,6 +5,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 add_library(screen STATIC
   screen_controller.cpp
+  dummy_screen_controller.cpp
 )
 
 target_include_directories(screen INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

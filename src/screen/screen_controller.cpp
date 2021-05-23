@@ -15,7 +15,7 @@ constexpr uint8_t kBrightness = 128;  // half brightness is more than blinding
 
 }  // namespace
 
-Q_LOGGING_CATEGORY(ScreenControllerLog, "animation.screen", QtInfoMsg)
+Q_LOGGING_CATEGORY(ScreenControllerLog, "screen.controller", QtInfoMsg)
 
 ScreenController::ScreenController()
     : led_panel_(std::make_unique<ws2811_t>()) {
