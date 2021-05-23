@@ -53,8 +53,20 @@ void ScreenController::draw(const std::vector<QColor>& pixels) {
         << "Driver wait:" << ws2811_get_return_t_str(status);
   }
 
-  for (int idx = pixels.size() - 1; idx >= 0; --idx) {
-    led_panel_->channel[0].leds[idx] = pixels[idx].rgb();
+  // for (int idx = pixels.size() - 1; idx >= 0; --idx) {
+  for (int x = 0; x < kScreenWidth; ++x) {
+    for (int y = 0; y < kScreenHeight; ++y) {
+      int src_index = (y * kScreenWidth) + x;
+      // every other row of the pannel has an inverted X axis
+      int dest_index;
+      if (y % 2) {
+        dest_index = (y * kScreenWidth) + (kScreenWidth - 1) - x;
+      } else {
+        dest_index = (y * kScreenWidth) + x;
+      }
+
+      led_panel_->channel[0].leds[dest_index] = pixels[src_index].rgb();
+    }
   }
 
   if (const ws2811_return_t status = ws2811_render(led_panel_.get());
