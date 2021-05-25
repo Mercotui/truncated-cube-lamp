@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QDateTime>
 #include <QJSEngine>
 #include <QSize>
 #include <memory>
@@ -17,7 +18,10 @@ class AnimationRunner : public QObject {
   QSize getResolution();
 
  private:
+  void loop(QJSValue animation_function);
+
   QJSEngine engine_;
   ScreenInterfaceJs screen_interface_js_;
   std::unique_ptr<ScreenControllerInterface> screen_;
+  QDateTime previous_frame_time_;
 };

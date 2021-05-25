@@ -1,10 +1,12 @@
 #include "screen_interface_js.hpp"
 
 #include <QColor>
-#include <QDebug>
+#include <QLoggingCategory>
 #include <QObject>
 #include <QSize>
 #include <vector>
+
+Q_LOGGING_CATEGORY(ScreenInterfaceLog, "animation.screeninterface", QtInfoMsg)
 
 ScreenInterfaceJs::ScreenInterfaceJs(QSize resolution, QObject* parent)
     : pixels_(resolution.width() * resolution.width(), "black"),

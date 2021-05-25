@@ -53,8 +53,10 @@ QHttpServerResponse RunnerApi::handleRun(const QHttpServerRequest& request) {
       auto name = name_object.toString();
       auto script = script_cache_->get(name);
       if (script.has_value()) {
+        qCDebug(RunnerApiLog) << "requesting script to be run:" << name;
         current_script_ = name;
         response.setObject(QJsonObject({{"current_script", current_script_}}));
+
         emit run(script.value());
       } else {
         auto error_message =

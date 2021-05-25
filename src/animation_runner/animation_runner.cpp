@@ -1,7 +1,15 @@
 #include "animation_runner.hpp"
 
-#include <QDebug>
+#include <QLoggingCategory>
+#include <QThread>
+#include <algorithm>
 #include <utility>
+
+Q_LOGGING_CATEGORY(AnimationRunnerLog, "animation.runner", QtDebugMsg)
+
+namespace {
+constexpr int kMinimumFrameIntervalMS = 16;  // for max 60 fps
+}  // namespace
 
 AnimationRunner::AnimationRunner(
     std::unique_ptr<ScreenControllerInterface> screen_controller)
@@ -16,9 +24,37 @@ AnimationRunner::AnimationRunner(
 }
 
 void AnimationRunner::run(QString animation_script) {
+  previous_frame_time_ = QDateTime::currentDateTime();
   auto result = engine_.evaluate(animation_script);
-  if (result.isError()) {
-    qDebug() << "eval result" << result.toString();
+  if (result.isCallable()) {
+    loop(result);
+  } else {
+    qCDebug(AnimationRunnerLog) << "eval result" << result.toString();
+  }
+}
+
+void AnimationRunner::loop(QJSValue animation_function) {
+  bool do_loop = true;
+  while (do_loop) {
+    auto animation_params = engine_.newObject();
+    auto current_frame_time = QDateTime::currentDateTime();
+    animation_params.setProperty("current_frame_time",
+                                 engine_.toScriptValue(current_frame_time));
+    animation_params.setProperty("previous_frame_time",
+                                 engine_.toScriptValue(previous_frame_time_));
+    previous_frame_time_ = current_frame_time;
+
+    auto result = animation_function.call({animation_params});
+    if (result.isDate()) {
+      int requested_interval =
+          QDateTime::currentDateTime().msecsTo(result.toDateTime());
+      qCDebug(AnimationRunnerLog)
+          << "sleeping for ms" << requested_interval << "ms";
+      QThread::msleep(std::max(requested_interval, kMinimumFrameIntervalMS));
+    } else {
+      qCDebug(AnimationRunnerLog) << "eval result" << result.toString();
+      do_loop = false;
+    }
   }
 }
 
