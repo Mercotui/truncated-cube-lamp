@@ -9,6 +9,21 @@
 #include "screen/dummy_screen_controller.hpp"
 #include "screen/screen_controller.hpp"
 
+namespace {
+std::unique_ptr<ScreenControllerInterface> createScreen(bool use_dummy) {
+  // decide runtime if the screen should be faked or not
+  std::unique_ptr<ScreenControllerInterface> screen;
+  if (use_dummy) {
+    qInfo() << "Using a Dummy Screen";
+    screen = std::make_unique<DummyScreenController>();
+  } else {
+    screen = std::make_unique<ScreenController>();
+  }
+  return std::move(screen);
+}
+
+}  // namespace
+
 int main(int argc, char **argv) {
   QCoreApplication app(argc, argv);
 
@@ -20,25 +35,22 @@ int main(int argc, char **argv) {
   parser.addOption({{"d", "dummy-screen"}, "Use a dummy screen controller"});
   parser.process(app);
 
-  // decide runtime if the screen should be faked or not
-  std::unique_ptr<ScreenControllerInterface> screen;
-  if (parser.isSet("dummy-screen")) {
-    qInfo() << "Using a Dummy Screen";
-    screen = std::make_unique<DummyScreenController>();
-  } else {
-    screen = std::make_unique<ScreenController>();
-  }
+  // setup animation runner in seperate thread
+  AnimationRunner runner(createScreen(parser.isSet("dummy-screen")));
+  runner.start();
 
-  AnimationRunner runner(std::move(screen));
-
+  // setup rest APIs, cache, and persistent storage
   auto scripts_cache = std::make_shared<ScriptsCache>();
+  scripts_cache.load();
   auto scripts_api = std::make_unique<ScriptsApi>(scripts_cache);
   auto runner_api =
       std::make_unique<RunnerApi>(scripts_cache, runner.getResolution());
 
+  // connect runner API to animation runner
   QObject::connect(runner_api.get(), &RunnerApi::run, &runner,
-                   &AnimationRunner::run);
+                   &AnimationRunner::runScript, Qt::QueuedConnection);
 
+  // setup http server with webpage and APIs
   HttpServer http_server(std::move(scripts_api), std::move(runner_api));
 
   return app.exec();

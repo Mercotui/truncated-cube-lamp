@@ -29,7 +29,7 @@ TEST(AnimationRunnerTest, DrawOne) {
   EXPECT_CALL(*mock_screen.get(), draw(Each(QColor("white")))).Times(1);
   AnimationRunner animation_runner(std::move(mock_screen));
 
-  animation_runner.run("screen.setPixel(0,0, \"white\"); screen.draw()");
+  animation_runner.runScript("screen.setPixel(0,0, \"white\"); screen.draw()");
 }
 
 TEST(AnimationRunnerTest, DrawHundred) {
@@ -39,7 +39,7 @@ TEST(AnimationRunnerTest, DrawHundred) {
   EXPECT_CALL(*mock_screen.get(), draw(Each(QColor("green")))).Times(1);
   AnimationRunner animation_runner(std::move(mock_screen));
 
-  animation_runner.run(
+  animation_runner.runScript(
       "for (let x = 0; x < screen.resolution.width; x++) {"
       "  for (let y = 0; y < screen.resolution.height; y++) {"
       "    screen.setPixel(x,y, \"green\");"
@@ -55,7 +55,7 @@ TEST(AnimationRunnerTest, DrawOutOfBounds) {
   EXPECT_CALL(*mock_screen.get(), draw(Each(QColor("red")))).Times(1);
   AnimationRunner animation_runner(std::move(mock_screen));
 
-  animation_runner.run(
+  animation_runner.runScript(
       "for (let x = -5; x < (screen.resolution.width + 5); x++) {"
       "  for (let y = -5; y < (screen.resolution.height + 5); y++) {"
       "    screen.setPixel(x,y, \"red\");"

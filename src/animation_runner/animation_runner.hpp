@@ -3,18 +3,19 @@
 #include <QDateTime>
 #include <QJSEngine>
 #include <QSize>
+#include <QThread>
 #include <memory>
 
 #include "screen_controller_interface.hpp"
 #include "screen_interface_js.hpp"
 
-class AnimationRunner : public QObject {
+class AnimationRunner : public QThread {
   Q_OBJECT
  public:
   explicit AnimationRunner(
       std::unique_ptr<ScreenControllerInterface> screen_controller);
 
-  void run(QString animation_script);
+  void runScript(QString animation_script);
   QSize getResolution();
 
  private:

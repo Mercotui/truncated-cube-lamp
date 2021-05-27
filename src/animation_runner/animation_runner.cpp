@@ -1,5 +1,6 @@
 #include "animation_runner.hpp"
 
+#include <QCoreApplication>
 #include <QLoggingCategory>
 #include <QThread>
 #include <algorithm>
@@ -13,8 +14,12 @@ constexpr int kMinimumFrameIntervalMS = 16;  // for max 60 fps
 
 AnimationRunner::AnimationRunner(
     std::unique_ptr<ScreenControllerInterface> screen_controller)
-    : screen_(std::move(screen_controller)),
-      screen_interface_js_(screen_controller->getResolution()) {
+    : engine_(),
+      screen_interface_js_(screen_controller->getResolution()),
+      screen_(std::move(screen_controller)) {
+  this->moveToThread(this);
+  engine_.moveToThread(this);
+  screen_interface_js_.moveToThread(this);
   engine_.installExtensions(QJSEngine::ConsoleExtension);
   engine_.globalObject().setProperty("screen",
                                      engine_.newQObject(&screen_interface_js_));
@@ -23,7 +28,7 @@ AnimationRunner::AnimationRunner(
           [this]() { screen_->draw(screen_interface_js_.pixels()); });
 }
 
-void AnimationRunner::run(QString animation_script) {
+void AnimationRunner::runScript(QString animation_script) {
   previous_frame_time_ = QDateTime::currentDateTime();
   auto result = engine_.evaluate(animation_script);
   if (result.isCallable()) {
@@ -34,6 +39,10 @@ void AnimationRunner::run(QString animation_script) {
 }
 
 void AnimationRunner::loop(QJSValue animation_function) {
+  qCDebug(AnimationRunnerLog)
+      << "looping on thread:" << QThread::currentThread()
+      << "application thread is:" << QCoreApplication::instance()->thread();
+
   bool do_loop = true;
   while (do_loop) {
     auto animation_params = engine_.newObject();
