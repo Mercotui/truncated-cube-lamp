@@ -1,8 +1,24 @@
 #include "scripts_cache.hpp"
 
+#include <QtCore/QDir>
+#include <QtCore/QFile>
 #include <QtCore/QLoggingCategory>
 
 Q_LOGGING_CATEGORY(ScriptsCacheLog, "scriptscache", QtInfoMsg)
+
+void ScriptsCache::loadDefaults(const QString& dir) {
+  qCInfo(ScriptsCacheLog) << "Loading Defaults from" << dir;
+  for (const auto& script_info : QDir(dir).entryInfoList()) {
+    QFile script_file(script_info.filePath());
+    script_file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QByteArray script = script_file.readAll();
+
+    auto name = script_info.fileName();
+    name.chop(3);  // remove .js extension from script name
+    qCDebug(ScriptsCacheLog) << "Loading Default:" << name;
+    scripts_[name] = script;
+  }
+}
 
 void ScriptsCache::save(const QString& file) {
   qCDebug(ScriptsCacheLog) << "fake save to" << file;

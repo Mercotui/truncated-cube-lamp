@@ -10,6 +10,8 @@
 #include "screen/screen_controller.hpp"
 
 namespace {
+constexpr auto kDefaultScriptsLocation = ":/animations";
+
 std::unique_ptr<ScreenControllerInterface> createScreen(bool use_dummy) {
   // decide runtime if the screen should be faked or not
   std::unique_ptr<ScreenControllerInterface> screen;
@@ -39,9 +41,12 @@ int main(int argc, char **argv) {
   AnimationRunner runner(createScreen(parser.isSet("dummy-screen")));
   runner.start();
 
-  // setup rest APIs, cache, and persistent storage
+  // cache and persistent storage
   auto scripts_cache = std::make_shared<ScriptsCache>();
-  scripts_cache.load();
+  Q_INIT_RESOURCE(animations);
+  scripts_cache->loadDefaults(kDefaultScriptsLocation);
+
+  // setup rest APIs
   auto scripts_api = std::make_unique<ScriptsApi>(scripts_cache);
   auto runner_api =
       std::make_unique<RunnerApi>(scripts_cache, runner.getResolution());

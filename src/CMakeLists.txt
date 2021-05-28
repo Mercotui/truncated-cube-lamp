@@ -10,7 +10,8 @@ add_executable(truncated_cube_lamp
 )
 
 target_link_libraries(truncated_cube_lamp animation_runner http_server
-                      website Qt::Core)
+  default_animations website Qt::Core
+)
 
 add_subdirectory(animation_runner)
 add_subdirectory(http_server)

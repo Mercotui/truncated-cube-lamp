@@ -6,6 +6,8 @@
 
 class ScriptsCache {
  public:
+  void loadDefaults(const QString& dir);
+
   void save(const QString& file);
   void load(const QString& file);
 
