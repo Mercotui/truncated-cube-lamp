@@ -6,10 +6,12 @@
 
 class ScriptsCache {
  public:
+  explicit ScriptsCache(QString savefile = "");
+
   void loadDefaults(const QString& dir);
 
-  void save(const QString& file);
-  void load(const QString& file);
+  void save(const QString& file_name);
+  void load(const QString& file_name);
 
   void add(const QString& name, const QString& script);
   void remove(const QString& name);
