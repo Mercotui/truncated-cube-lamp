@@ -3,8 +3,8 @@
 #include <QtHttpServer/QtHttpServer>
 #include <memory>
 
-#include "runner_api.hpp"
-#include "scripts_api.hpp"
+class ScriptsApi;
+class RunnerApi;
 
 Q_DECLARE_LOGGING_CATEGORY(HttpServerLog)
 

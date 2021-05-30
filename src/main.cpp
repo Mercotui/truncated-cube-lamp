@@ -2,9 +2,9 @@
 #include <QtCore/QtCore>
 
 #include "animation_runner/animation_runner.hpp"
+#include "http_server/api/runner_api.hpp"
+#include "http_server/api/scripts_api.hpp"
 #include "http_server/http_server.hpp"
-#include "http_server/runner_api.hpp"
-#include "http_server/scripts_api.hpp"
 #include "http_server/scripts_cache.hpp"
 #include "screen/dummy_screen_controller.hpp"
 #include "screen/screen_controller.hpp"

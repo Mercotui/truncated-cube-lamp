@@ -3,6 +3,8 @@
 #include <QtCore/QLoggingCategory>
 #include <utility>
 
+#include "../scripts_cache.hpp"
+
 using StatusCode = QHttpServerResponse::StatusCode;
 using Method = QHttpServerRequest::Method;
 

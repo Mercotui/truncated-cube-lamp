@@ -5,6 +5,9 @@
 #include <string_view>
 #include <utility>
 
+#include "api/runner_api.hpp"
+#include "api/scripts_api.hpp"
+
 Q_LOGGING_CATEGORY(HttpServerLog, "http.server", QtInfoMsg)
 
 namespace {

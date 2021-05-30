@@ -4,6 +4,8 @@
 #include <QtCore/QLoggingCategory>
 #include <utility>
 
+#include "../scripts_cache.hpp"
+
 using StatusCode = QHttpServerResponse::StatusCode;
 
 Q_LOGGING_CATEGORY(RunnerApiLog, "http.api.runner", QtInfoMsg)

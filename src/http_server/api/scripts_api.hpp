@@ -5,7 +5,7 @@
 #include <QtHttpServer/QtHttpServer>
 #include <memory>
 
-#include "scripts_cache.hpp"
+class ScriptsCache;
 
 class ScriptsApi : public QObject {
   Q_OBJECT
