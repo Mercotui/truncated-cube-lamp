@@ -14,6 +14,7 @@
 <script>
 import CodeEditor from '../components/CodeEditor';
 import LampEmulator from '../components/LampEmulator';
+import axios from 'axios';
 
 export default {
   components: {
@@ -28,6 +29,12 @@ export default {
   data: () => ({
     //
   }),
+
+  mounted() {
+    axios.get(`/api/scripts/${name}`).then(function (response){
+      console.log(response.data.script)
+    })
+  },
 
   methods: {
     runInEmulator: function (animation_script) {

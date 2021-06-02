@@ -14,7 +14,7 @@
           </v-list-item>
 
           <v-list-item-group v-model="selectedItem" color="primary">
-            <v-list-item v-for="(script_name, i) in scripts" :key="i">
+            <v-list-item v-for="(script_name, i) in images" :key="i">
               <v-list-item-content>
                 <v-list-item-title v-text="script_name"></v-list-item-title>
               </v-list-item-content>
@@ -26,7 +26,7 @@
 
           <v-subheader>Animations</v-subheader>
           <v-list-item-group v-model="selectedItem" color="primary">
-            <v-list-item v-for="(script_name, i) in scripts" :key="i" v-on:click="runScript(script_name)">
+            <v-list-item v-for="(script_name, i) in animations" :key="i" v-on:click="runScript(script_name)">
               <v-list-item-content>
                 <v-list-item-title v-text="script_name"></v-list-item-title>
               </v-list-item-content>
@@ -57,6 +57,21 @@
     data() {
       return {
         scripts: [],
+      }
+    },
+
+    computed: {
+      animations: function () {
+        var animation_scripts = this.scripts.filter(script => {
+          return script.type.includes("animation")
+        })
+        return Array.from(animation_scripts, script => script.name)
+      },
+      images: function () {
+        var image_scripts = this.scripts.filter(script => {
+          return script.type.includes("image")
+        })
+        return Array.from(image_scripts, script => script.name)
       }
     },
 

@@ -3,6 +3,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 
 import vuetify from './plugins/vuetify';
+import {makeServer} from "./server"
 
 import ScriptsList from './views/ScriptsList';
 import ScriptView from './views/ScriptView';
@@ -17,6 +18,10 @@ const router = new VueRouter({
     { path: '/scriptview/:name', component: ScriptView, props: true },
   ]
 })
+
+if (process.env.NODE_ENV === "development") {
+  makeServer()
+}
 
 new Vue({
   router,
