@@ -57,6 +57,13 @@ import utf8 from 'utf8';
         editor: require('vue2-ace-editor'),
     },
 
+    mounted() {
+      axios.get('/api/scripts/' + this.script_name + '/').then(response => {
+        var bytes = base64.decode(response.data.script);
+        this.content = utf8.decode(bytes);
+      })
+    },
+
     methods: {
       editorInit: function (editor) {
         require('brace/ext/language_tools') //language extension prerequsite...
@@ -84,6 +91,7 @@ import utf8 from 'utf8';
       saveAs: function () {
         this.overlay_opened = false;
         this.save();
+        this.$router.push('/scriptview/' + this.script_name)
       },
 
       runInEmulator: function () {

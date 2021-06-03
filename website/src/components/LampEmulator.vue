@@ -57,7 +57,8 @@
     },
 
     draw: function () {
-      this.ctx.clearRect(0, 0, this.width, this.height);
+      this.ctx.fillStyle = "black";
+      this.ctx.fillRect(0, 0, this.width, this.height);
 
       for (let x = 0; x < this.width; x++) {
         for (let y = 0; y < this.height; y++) {
