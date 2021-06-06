@@ -1,8 +1,10 @@
 #include "animation_runner.hpp"
 
-#include <QCoreApplication>
-#include <QLoggingCategory>
-#include <QThread>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDir>
+#include <QtCore/QDirIterator>
+#include <QtCore/QLoggingCategory>
+#include <QtCore/QThread>
 #include <algorithm>
 #include <utility>
 
@@ -10,6 +12,7 @@ Q_LOGGING_CATEGORY(AnimationRunnerLog, "animation.runner", QtDebugMsg)
 
 namespace {
 constexpr int kMinimumFrameIntervalMS = 16;  // for max 60 fps
+constexpr std::string_view kLibrariesResourceDir = ":/libraries";
 }  // namespace
 
 AnimationRunner::AnimationRunner(
@@ -17,6 +20,9 @@ AnimationRunner::AnimationRunner(
     : engine_(),
       screen_interface_js_(screen_controller->getResolution()),
       screen_(std::move(screen_controller)) {
+  Q_INIT_RESOURCE(libraries);
+  loadLibraries();
+
   this->moveToThread(this);
   engine_.moveToThread(this);
   screen_interface_js_.moveToThread(this);
@@ -26,6 +32,38 @@ AnimationRunner::AnimationRunner(
 
   connect(&screen_interface_js_, &ScreenInterfaceJs::draw,
           [this]() { screen_->draw(screen_interface_js_.pixels()); });
+}
+
+AnimationRunner::~AnimationRunner() { Q_CLEANUP_RESOURCE(libraries); }
+
+void AnimationRunner::loadLibraries() {
+  auto website_dir = QDir(kLibrariesResourceDir.data());
+  QDirIterator dir_it(website_dir.path(), {}, QDir::Files,
+                      QDirIterator::Subdirectories);
+  while (dir_it.hasNext()) {
+    auto file_path = dir_it.next();
+    auto file_path_without_resource =
+        file_path.mid(kLibrariesResourceDir.size());
+
+    QFile scriptFile(file_path);
+    if (!scriptFile.open(QIODevice::ReadOnly)) {
+      qCWarning(AnimationRunnerLog) << "Tried to load library" << file_path
+                                    << "but could not open the file";
+      continue;
+    }
+    qCInfo(AnimationRunnerLog)
+        << "Loading library" << file_path_without_resource << "from"
+        << file_path;
+
+    QTextStream stream(&scriptFile);
+    QString contents = stream.readAll();
+    scriptFile.close();
+    auto result = engine_.evaluate(contents, file_path);
+    if (result.isError()) {
+      qCWarning(AnimationRunnerLog) << "Loading" << file_path_without_resource
+                                    << "failed:" << result.toString();
+    }
+  }
 }
 
 void AnimationRunner::runScript(QString animation_script) {

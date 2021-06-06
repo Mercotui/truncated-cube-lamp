@@ -27,7 +27,12 @@ void ScriptsApi::registerApi(QHttpServer* server) {
 }
 
 QJsonObject ScriptsApi::handleRoot() {
-  return {{"scripts", QJsonArray::fromStringList(scripts_cache_->getNames())}};
+  QJsonArray script_list;
+  for (const auto& script : scripts_cache_->getNames()) {
+    script_list.append(
+        QJsonObject({{{"name", script}, {"type", "animation"}}}));
+  }
+  return {{"scripts", script_list}};
 }
 
 QHttpServerResponse ScriptsApi::handleScriptGet(const QString& name) {
@@ -38,7 +43,8 @@ QHttpServerResponse ScriptsApi::handleScriptGet(const QString& name) {
   // if script was found, send it in the response
   if (script.has_value()) {
     auto encoded_script = QString(script.value().toUtf8().toBase64());
-    response.setObject(QJsonObject{{{"script", encoded_script}}});
+    response.setObject(QJsonObject{
+        {{"name", name}, {"type", "animation"}, {"script", encoded_script}}});
   } else {
     http_status = StatusCode::NotFound;
   }

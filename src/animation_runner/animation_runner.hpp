@@ -15,11 +15,14 @@ class AnimationRunner : public QThread {
   explicit AnimationRunner(
       std::unique_ptr<ScreenControllerInterface> screen_controller);
 
+  virtual ~AnimationRunner();
+
   void runScript(QString animation_script);
   QSize getResolution();
 
  private:
   void loop(QJSValue animation_function);
+  void loadLibraries();
 
   QJSEngine engine_;
   ScreenInterfaceJs screen_interface_js_;
