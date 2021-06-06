@@ -55,7 +55,7 @@ QHttpServerResponse ScriptsApi::handleScriptGet(const QString& name) {
 QHttpServerResponse ScriptsApi::handleScriptDelete(const QString& name) {
   StatusCode http_status = StatusCode::Ok;
   // if script was found then delete it
-  if (scripts_cache_->get(name)) {
+  if (scripts_cache_->has(name)) {
     scripts_cache_->remove(name);
   } else {
     http_status = StatusCode::NotFound;

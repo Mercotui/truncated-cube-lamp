@@ -75,11 +75,14 @@ void ScriptsCache::load(const QString& file_name) {
     } else {
       for (const auto& object_ref : scripts_array) {
         auto script_object = object_ref.toObject();
-        QString decoded_script = script_object.value("script")
-                                     .toString()
-                                     .toUtf8()
-                                     .toBase64()
-                                     .constData();
+        auto decoding_result = QByteArray::fromBase64Encoding(
+            script_object.value("script").toString().toUtf8());
+        if (!decoding_result) {
+          qCWarning(ScriptsCacheLog)
+              << "Malformed savefile entry" << script_object;
+          continue;
+        }
+        QString decoded_script = decoding_result.decoded;
         QString name = script_object.value("name").toString();
         scripts_[name] = decoded_script;
       }
@@ -106,6 +109,8 @@ void ScriptsCache::remove(const QString& name) {
   } else {
     qCInfo(ScriptsCacheLog) << "Asked to delete unknown script" << name;
   }
+
+  save(kDefaultSaveFile);
 }
 
 bool ScriptsCache::has(const QString& name) const {
