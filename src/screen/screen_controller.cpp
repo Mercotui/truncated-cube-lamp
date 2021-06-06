@@ -76,6 +76,27 @@ void ScreenController::draw(const std::vector<QColor>& pixels) {
   }
 }
 
+void ScreenController::clear() {
+  if (!led_panel_) {
+    Q_ASSERT_X(false, Q_FUNC_INFO, "Screen not initialized");
+    return;
+  }
+
+  if (const ws2811_return_t status = ws2811_wait(led_panel_.get());
+      status != WS2811_SUCCESS) {
+    qCWarning(ScreenControllerLog)
+        << "Driver wait:" << ws2811_get_return_t_str(status);
+  }
+
+  memset(led_panel_->channel[0].leds, 0, sizeof(ws2811_led_t) * kPixelCount);
+
+  if (const ws2811_return_t status = ws2811_render(led_panel_.get());
+      status != WS2811_SUCCESS) {
+    qCWarning(ScreenControllerLog)
+        << "Driver render:" << ws2811_get_return_t_str(status);
+  }
+}
+
 QSize ScreenController::getResolution() {
   return {kScreenWidth, kScreenHeight};
 }

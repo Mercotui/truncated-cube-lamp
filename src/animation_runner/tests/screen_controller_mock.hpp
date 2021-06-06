@@ -8,5 +8,6 @@
 class ScreenControllerMock : public ScreenControllerInterface {
  public:
   MOCK_METHOD(void, draw, (const std::vector<QColor>& pixels), (override));
+  MOCK_METHOD(void, clear, (), (override));
   MOCK_METHOD(QSize, getResolution, (), (override));
 };

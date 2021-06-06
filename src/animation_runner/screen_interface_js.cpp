@@ -10,7 +10,6 @@ Q_LOGGING_CATEGORY(ScreenInterfaceLog, "animation.screeninterface", QtInfoMsg)
 
 ScreenInterfaceJs::ScreenInterfaceJs(QSize resolution, QObject* parent)
     : pixels_(resolution.width() * resolution.width(), "black"),
-      test_(resolution.width() * resolution.width(), 12),
       resolution_(resolution),
       QObject(parent) {}
 
@@ -22,6 +21,10 @@ void ScreenInterfaceJs::setPixel(const int x, const int y, QColor color) {
 
 QColor ScreenInterfaceJs::getPixel(const int x, const int y) {
   return pixels_[wrapCoordinates(x, y)];
+}
+
+void ScreenInterfaceJs::setAllPixels(QColor color) {
+  std::fill(pixels_.begin(), pixels_.end(), color);
 }
 
 int ScreenInterfaceJs::wrapCoordinates(const int x, const int y) {

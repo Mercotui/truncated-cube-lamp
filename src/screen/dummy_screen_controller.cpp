@@ -18,6 +18,10 @@ void DummyScreenController::draw(const std::vector<QColor>& pixels) {
   qCDebug(DummyScreenControllerLog) << pixels;
 }
 
+void DummyScreenController::clear() {
+  qCInfo(DummyScreenControllerLog) << "Clear";
+}
+
 QSize DummyScreenController::getResolution() {
   return {kScreenWidth, kScreenHeight};
 }

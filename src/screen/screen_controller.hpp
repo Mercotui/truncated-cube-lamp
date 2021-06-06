@@ -13,6 +13,7 @@ class ScreenController final : public ScreenControllerInterface {
   ~ScreenController() final;
 
   void draw(const std::vector<QColor>& pixels) final;
+  void clear() final;
   QSize getResolution() final;
 
  private:

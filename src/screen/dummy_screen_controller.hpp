@@ -12,5 +12,6 @@ class DummyScreenController final : public ScreenControllerInterface {
   ~DummyScreenController() final = default;
 
   void draw(const std::vector<QColor>& pixels) final;
+  void clear() final;
   QSize getResolution() final;
 };

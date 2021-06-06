@@ -18,12 +18,12 @@ class ScreenInterfaceJs : public QObject {
   void setPixel(const int x, const int y, QColor color);
 
   QColor getPixel(const int x, const int y);
+  void setAllPixels(QColor color);
 
  signals:
   void draw();
 
  private:
-  QVector<int> test_;
   std::vector<QColor> pixels_;
   QSize resolution_;
 

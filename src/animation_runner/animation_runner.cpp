@@ -13,6 +13,7 @@ Q_LOGGING_CATEGORY(AnimationRunnerLog, "animation.runner", QtDebugMsg)
 namespace {
 constexpr int kMinimumFrameIntervalMS = 16;  // for max 60 fps
 constexpr std::string_view kLibrariesResourceDir = ":/libraries";
+constexpr auto kClearColor = "black";
 }  // namespace
 
 AnimationRunner::AnimationRunner(
@@ -80,6 +81,9 @@ void AnimationRunner::stopScript() {
 }
 
 void AnimationRunner::runScriptInternal(QString animation_script) {
+  screen_interface_js_.setAllPixels(kClearColor);
+  screen_->clear();
+
   engine_.setInterrupted(false);
   previous_frame_time_ = QDateTime::currentDateTime();
   auto result = engine_.evaluate(animation_script);
