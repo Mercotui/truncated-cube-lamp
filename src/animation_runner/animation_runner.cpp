@@ -23,6 +23,9 @@ AnimationRunner::AnimationRunner(
   Q_INIT_RESOURCE(libraries);
   loadLibraries();
 
+  connect(this, &AnimationRunner::runScriptInThread, this,
+          &AnimationRunner::runScriptInternal, Qt::QueuedConnection);
+
   this->moveToThread(this);
   engine_.moveToThread(this);
   screen_interface_js_.moveToThread(this);
@@ -67,6 +70,17 @@ void AnimationRunner::loadLibraries() {
 }
 
 void AnimationRunner::runScript(QString animation_script) {
+  stopScript();
+  emit runScriptInThread(animation_script);
+}
+
+void AnimationRunner::stopScript() {
+  engine_.setInterrupted(true);
+  do_loop_ = false;
+}
+
+void AnimationRunner::runScriptInternal(QString animation_script) {
+  engine_.setInterrupted(false);
   previous_frame_time_ = QDateTime::currentDateTime();
   auto result = engine_.evaluate(animation_script);
   if (result.isCallable()) {
@@ -81,8 +95,8 @@ void AnimationRunner::loop(QJSValue animation_function) {
       << "looping on thread:" << QThread::currentThread()
       << "application thread is:" << QCoreApplication::instance()->thread();
 
-  bool do_loop = true;
-  while (do_loop) {
+  do_loop_ = true;
+  while (do_loop_) {
     auto animation_params = engine_.newObject();
     auto current_frame_time = QDateTime::currentDateTime();
     animation_params.setProperty("current_frame_time",
@@ -100,7 +114,7 @@ void AnimationRunner::loop(QJSValue animation_function) {
       QThread::msleep(std::max(requested_interval, kMinimumFrameIntervalMS));
     } else {
       qCDebug(AnimationRunnerLog) << "eval result" << result.toString();
-      do_loop = false;
+      do_loop_ = false;
     }
   }
 }

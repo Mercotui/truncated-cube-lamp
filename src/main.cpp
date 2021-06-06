@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
 
   // connect runner API to animation runner
   QObject::connect(runner_api.get(), &RunnerApi::run, &runner,
-                   &AnimationRunner::runScript, Qt::QueuedConnection);
+                   &AnimationRunner::runScript, Qt::DirectConnection);
 
   // setup http server with webpage and APIs
   HttpServer http_server(std::move(scripts_api), std::move(runner_api));
