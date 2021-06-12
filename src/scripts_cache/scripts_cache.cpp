@@ -21,7 +21,7 @@ ScriptsCache::ScriptsCache(QString savefile) {
   }
 }
 
-void ScriptsCache::loadDefaults(const QString& dir) {
+void ScriptsCache::loadDefaults(const QString& dir, Script::ScriptType type) {
   qCInfo(ScriptsCacheLog) << "Loading Defaults from" << dir;
   for (const auto& script_info : QDir(dir).entryInfoList()) {
     QFile script_file(script_info.filePath());
@@ -31,7 +31,7 @@ void ScriptsCache::loadDefaults(const QString& dir) {
     auto name = script_info.fileName();
     name.chop(3);  // remove .js extension from script name
     qCDebug(ScriptsCacheLog) << "Loading Default:" << name;
-    scripts_[name] = script;
+    scripts_[name] = {name, script, {Script::ScriptType::kDefault, type}};
   }
 }
 
@@ -40,13 +40,10 @@ void ScriptsCache::save(const QString& file_name) {
 
   QJsonArray scripts_array;
   for (auto iter = std::begin(scripts_); iter != std::end(scripts_); iter++) {
-    // TODO(menno): don't save default scripts
-    QJsonObject script_object;
-    script_object["name"] = iter.key();
-    // TODO(menno): save script type
-    script_object["type"] = "animation";
-    script_object["script"] = iter.value().toUtf8().toBase64().constData();
-    scripts_array.append({script_object});
+    const auto script = iter.value();
+    if (script.shouldBeSaved()) {
+      scripts_array.append(script.toJsonObject());
+    }
   }
 
   QFile save_file(file_name);
@@ -74,23 +71,17 @@ void ScriptsCache::load(const QString& file_name) {
       return;
     } else {
       for (const auto& object_ref : scripts_array) {
-        auto script_object = object_ref.toObject();
-        auto decoding_result = QByteArray::fromBase64Encoding(
-            script_object.value("script").toString().toUtf8());
-        if (!decoding_result) {
-          qCWarning(ScriptsCacheLog)
-              << "Malformed savefile entry" << script_object;
-          continue;
+        auto script = Script::fromJsonObject(object_ref.toObject());
+        if (script) {
+          scripts_[script.value().name()] = script.value();
         }
-        QString decoded_script = decoding_result.decoded;
-        QString name = script_object.value("name").toString();
-        scripts_[name] = decoded_script;
       }
     }
   }
 }
 
-void ScriptsCache::add(const QString& name, const QString& script) {
+void ScriptsCache::add(const Script& script) {
+  const auto name = script.name();
   if (auto iter = scripts_.find(name); iter != scripts_.end()) {
     qCDebug(ScriptsCacheLog) << "Overwriting script" << name;
   } else {
@@ -117,7 +108,7 @@ bool ScriptsCache::has(const QString& name) const {
   return scripts_.find(name) != scripts_.cend();
 }
 
-std::optional<QString> ScriptsCache::get(const QString& name) const {
+std::optional<Script> ScriptsCache::get(const QString& name) const {
   if (auto iter = scripts_.find(name); iter != scripts_.end()) {
     return iter.value();
   } else {

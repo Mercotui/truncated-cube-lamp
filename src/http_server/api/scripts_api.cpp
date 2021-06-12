@@ -3,7 +3,7 @@
 #include <QtCore/QLoggingCategory>
 #include <utility>
 
-#include "../scripts_cache.hpp"
+#include "scripts_cache.hpp"
 
 using StatusCode = QHttpServerResponse::StatusCode;
 using Method = QHttpServerRequest::Method;
@@ -42,9 +42,7 @@ QHttpServerResponse ScriptsApi::handleScriptGet(const QString& name) {
 
   // if script was found, send it in the response
   if (script.has_value()) {
-    auto encoded_script = QString(script.value().toUtf8().toBase64());
-    response.setObject(QJsonObject{
-        {{"name", name}, {"type", "animation"}, {"script", encoded_script}}});
+    response.setObject(script.value().toJsonObject());
   } else {
     http_status = StatusCode::NotFound;
   }
@@ -78,30 +76,18 @@ QHttpServerResponse ScriptsApi::handleScriptPut(
     response.setObject(QJsonObject({{"error", error_message}}));
     http_status = StatusCode::BadRequest;
   } else {
-    auto script_object = request_json["script"];
+    auto script_object = Script::fromJsonObject(request_json.object());
 
-    // check if the script value is a string
-    if (!script_object.isString()) {
-      auto error_message =
-          QString("expected \"script\" of type string, but got \"%1\"")
-              .arg(QVariant::fromValue(script_object.type()).toString());
-      response.setObject(QJsonObject({{"error", error_message}}));
+    // check if the script could be parsed
+    if (!script_object.has_value()) {
+      response.setObject(QJsonObject({{"error", "malformed script object"}}));
       http_status = StatusCode::UnprocessableEntity;
     } else {
-      auto script_encoded = script_object.toString();
-      auto decoding_result = QByteArray::fromBase64Encoding(
-          script_encoded.toUtf8(), QByteArray::AbortOnBase64DecodingErrors);
-
-      // check if the script value is valid Base64 data
-      if (decoding_result.decodingStatus ==
-          QByteArray::Base64DecodingStatus::Ok) {
-        // add script to cache!
-        scripts_cache_->add(name, decoding_result.decoded);
-        response.setObject(QJsonObject({{"script", script_encoded}}));
+      auto script = script_object.value();
+      if (script.name() == name) {
+        scripts_cache_->add(script_object.value());
       } else {
-        auto error_message =
-            QString("the script value was not a valid Base64 encoded string");
-        response.setObject(QJsonObject({{"error", error_message}}));
+        response.setObject(QJsonObject({{"error", "name didn't match uri"}}));
         http_status = StatusCode::UnprocessableEntity;
       }
     }

@@ -4,7 +4,7 @@
 #include <QtCore/QLoggingCategory>
 #include <utility>
 
-#include "../scripts_cache.hpp"
+#include "scripts_cache.hpp"
 
 using StatusCode = QHttpServerResponse::StatusCode;
 
@@ -59,7 +59,7 @@ QHttpServerResponse RunnerApi::handleRun(const QHttpServerRequest& request) {
         current_script_ = name;
         response.setObject(QJsonObject({{"current_script", current_script_}}));
 
-        emit run(script.value());
+        emit run(script.value().code());
       } else {
         auto error_message =
             QString("no script found for \"name\"=\"%1\"").arg(name);

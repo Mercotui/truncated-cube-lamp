@@ -84,7 +84,9 @@ import utf8 from 'utf8';
         var encoded_script = base64.encode(bytes);
 
         axios.put('/api/scripts/' + this.script_name + '/', {
-          script: encoded_script
+          name: this.script_name,
+          script: encoded_script,
+          types: "animation",
         });
       },
 

@@ -5,9 +5,10 @@
 #include "http_server/api/runner_api.hpp"
 #include "http_server/api/scripts_api.hpp"
 #include "http_server/http_server.hpp"
-#include "http_server/scripts_cache.hpp"
 #include "screen/dummy_screen_controller.hpp"
 #include "screen/screen_controller.hpp"
+#include "scripts_cache/script.hpp"
+#include "scripts_cache/scripts_cache.hpp"
 
 namespace {
 constexpr auto kDefaultScriptsLocation = ":/animations";
@@ -44,7 +45,8 @@ int main(int argc, char **argv) {
   // cache and persistent storage
   auto scripts_cache = std::make_shared<ScriptsCache>();
   Q_INIT_RESOURCE(animations);
-  scripts_cache->loadDefaults(kDefaultScriptsLocation);
+  scripts_cache->loadDefaults(kDefaultScriptsLocation,
+                              Script::ScriptType::kAnimation);
 
   // setup rest APIs
   auto scripts_api = std::make_unique<ScriptsApi>(scripts_cache);
