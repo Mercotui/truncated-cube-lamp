@@ -2,19 +2,12 @@
   <v-container>
     <v-row class="text-center">
       <v-col class="mb-4">
-        <p class="subheading font-weight-regular">
-          heya
-        </p>
-        <v-btn elevation="2" v-on:click="save">Save</v-btn>
-        <v-btn elevation="2" v-on:click="overlay_opened = true">Save As</v-btn>
-        <v-btn elevation="2" v-on:click="runInEmulator">Run in Emulator</v-btn>
-
-        <v-overlay :value="overlay_opened">
+        <v-overlay :value="save_overlay_opened">
           <v-card class="mx-auto my-12" max-width="374">
             <v-card-title>Enter Script Name</v-card-title>
             <v-text-field label="Script Name" v-model="script_name" solo></v-text-field>
             <v-card-actions>
-              <v-btn color="primary" @click="overlay_opened = false">
+              <v-btn @click="save_overlay_opened = false">
                 Cancel
               </v-btn>
               <v-btn color="success" @click="saveAs">
@@ -24,9 +17,29 @@
           </v-card>
         </v-overlay>
 
+        <div class="text-center">
+          <v-btn class="mx-1" elevation="2" :disabled="!save_enabled" v-on:click="save">Save</v-btn>
+          <v-btn class="mx-1" elevation="2" v-on:click="save_overlay_opened = true">Save As</v-btn>
+          <v-btn class="mx-1" elevation="2" :disabled="!delete_enabled" color="error" v-on:click="delete_overlay_opened = true">Delete</v-btn>
+          <v-btn class="mx-1" elevation="2" color="success" v-on:click="runInEmulator">Run in Emulator</v-btn>
+        </div>
+
+        <v-overlay :value="delete_overlay_opened">
+          <v-card class="mx-auto my-12" max-width="374">
+            <v-card-title>Delete {{script_name}} ?</v-card-title>
+            <v-card-actions>
+              <v-btn @click="delete_overlay_opened = false">
+                Cancel
+              </v-btn>
+              <v-btn color="error" @click="deleteScript">
+                Delete
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-overlay>
 
         <div class="container" style="display: flex; flex: 1;">
-          <editor v-model="content" @init="editorInit" width="500" height="500" lang="javascript" theme="monokai"></editor>
+          <editor v-model="content" @init="editorInit" lang="javascript" theme="monokai"></editor>
         </div>
 
 
@@ -44,10 +57,22 @@ import utf8 from 'utf8';
   export default {
     data() {
       return {
-        overlay_opened: false,
+        save_overlay_opened: false,
+        delete_overlay_opened: false,
+        type: ["animation"],
         content: "screen.setPixel(0, 0, 'red');\nscreen.setPixel(2, 5, 'green');\nscreen.setPixel(6, 6, 'blue');\nscreen.draw();",
       }
     },
+
+    computed: {
+      save_enabled: function () {
+        return !(this.type.includes("default") || this.script_name  === "")
+      },
+      delete_enabled: function () {
+        return !(this.type.includes("default") || this.type.includes("template"))
+      },
+    },
+
 
     props: {
       script_name: String
@@ -61,6 +86,7 @@ import utf8 from 'utf8';
       axios.get('/api/scripts/' + this.script_name + '/').then(response => {
         var bytes = base64.decode(response.data.script);
         this.content = utf8.decode(bytes);
+        this.type = response.data.type
       })
     },
 
@@ -86,14 +112,20 @@ import utf8 from 'utf8';
         axios.put('/api/scripts/' + this.script_name + '/', {
           name: this.script_name,
           script: encoded_script,
-          types: "animation",
+          type: this.type,
         });
       },
 
       saveAs: function () {
-        this.overlay_opened = false;
+        this.delete_overlay_opened = false;
         this.save();
-        this.$router.push('/scriptview/' + this.script_name)
+        this.$router.push('/scriptview/' + this.script_name);
+      },
+
+      deleteScript: function () {
+        axios.delete('/api/scripts/' + this.script_name + '/').then(() => {
+          this.$router.push('/');
+        });
       },
 
       runInEmulator: function () {

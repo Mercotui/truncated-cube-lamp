@@ -35,6 +35,8 @@ let server = new Server({
     })
 
     this.put("/scripts/:name", () => {})
+
+    this.delete("/scripts/:name", () => {})
   },
   })
 
