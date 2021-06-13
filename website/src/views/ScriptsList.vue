@@ -63,15 +63,15 @@
     computed: {
       animations: function () {
         var animation_scripts = this.scripts.filter(script => {
-          return script.type.includes("animation")
+          return script.type.includes("animation") && !script.type.includes("template");
         })
-        return Array.from(animation_scripts, script => script.name)
+        return Array.from(animation_scripts, script => script.name).sort();
       },
       images: function () {
         var image_scripts = this.scripts.filter(script => {
-          return script.type.includes("image")
+          return script.type.includes("image") && !script.type.includes("template");
         })
-        return Array.from(image_scripts, script => script.name)
+        return Array.from(image_scripts, script => script.name).sort();
       }
     },
 

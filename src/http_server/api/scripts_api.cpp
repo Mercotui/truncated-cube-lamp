@@ -84,7 +84,7 @@ QHttpServerResponse ScriptsApi::handleScriptPut(
       http_status = StatusCode::UnprocessableEntity;
     } else {
       auto script = script_object.value();
-      if (script.name() == name) {
+      if (script.name() == name && !name.isEmpty()) {
         scripts_cache_->add(script_object.value());
       } else {
         response.setObject(QJsonObject({{"error", "name didn't match uri"}}));
