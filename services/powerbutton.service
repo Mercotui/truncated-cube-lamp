@@ -1,0 +1,9 @@
+[Unit]
+Description=Monitors powerbutton to send shutdown command
+
+[Service]
+Restart=on-abnormal
+ExecStart=/usr/local/bin/powerbutton.py
+
+[Install]
+WantedBy=multi-user.target
