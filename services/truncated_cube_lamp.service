@@ -1,0 +1,12 @@
+[Unit]
+Description=Starts the truncated_cube_lamp application
+
+[Service]
+Restart=on-abnormal
+
+# hardcoded paths :shrug:
+ExecStart=/home/ubuntu/truncated-cube-lamp/build/src/truncated_cube_lamp
+WorkingDirectory=/home/ubuntu/truncated-cube-lamp/build
+
+[Install]
+WantedBy=multi-user.target

@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <utility>
 
-Q_LOGGING_CATEGORY(AnimationRunnerLog, "animation.runner", QtDebugMsg)
+Q_LOGGING_CATEGORY(AnimationRunnerLog, "animation.runner", QtInfoMsg)
 
 namespace {
 constexpr int kMinimumFrameIntervalMS = 16;  // for max 60 fps
