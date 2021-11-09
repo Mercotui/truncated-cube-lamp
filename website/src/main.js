@@ -7,6 +7,7 @@ import {makeServer} from "./server"
 
 import ScriptsList from './views/ScriptsList';
 import ScriptView from './views/ScriptView';
+import DrawView from './views/DrawView';
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -14,6 +15,7 @@ Vue.config.productionTip = false
 const router = new VueRouter({
   routes:  [
     { path: '/', component: ScriptsList },
+    { path: '/drawing/', component: DrawView, props: true },
     { path: '/scriptview/', component: ScriptView, props: true },
     { path: '/scriptview/:name', component: ScriptView, props: true },
   ]

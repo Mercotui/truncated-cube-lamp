@@ -4,7 +4,7 @@
       <v-col class="mb-4">
         <v-list dense>
           <v-subheader>Images</v-subheader>
-          <v-list-item>
+          <v-list-item v-on:click="openDrawing('')">
             <v-list-item-content>
               <v-list-item-title>Draw</v-list-item-title>
             </v-list-item-content>
@@ -14,11 +14,11 @@
           </v-list-item>
 
           <v-list-item-group v-model="selectedItem" color="primary">
-            <v-list-item v-for="(script_name, i) in images" :key="i">
+            <v-list-item v-for="(script_name, i) in images" :key="i" v-on:click="runScript(script_name)">
               <v-list-item-content>
                 <v-list-item-title v-text="script_name"></v-list-item-title>
               </v-list-item-content>
-              <v-list-item-icon>
+              <v-list-item-icon v-on:click="openDrawing(script_name)">
                 <v-icon>mdi-palette</v-icon>
             </v-list-item-icon>
             </v-list-item>
@@ -35,7 +35,7 @@
               </v-list-item-icon>
             </v-list-item>
 
-            <v-list-item v-on:click="openScript('t555')">
+            <v-list-item v-on:click="openScript('')">
               <v-list-item-content>
                 <v-list-item-title>New Script</v-list-item-title>
               </v-list-item-content>
@@ -88,6 +88,9 @@
       openScript: function (script_name) {
         this.$router.push('/scriptview/' + script_name)
       },
+      openDrawing: function (drawing_name) {
+        this.$router.push('/drawing/' + drawing_name)
+      }
     },
   }
 </script>
