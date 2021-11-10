@@ -1,5 +1,6 @@
 #include <QtCore/QCache>
 #include <QtCore/QtCore>
+#include <QtNetwork/QHostAddress>
 
 #include "animation_runner/animation_runner.hpp"
 #include "http_server/api/runner_api.hpp"
@@ -12,6 +13,7 @@
 
 namespace {
 constexpr auto kDefaultScriptsLocation = ":/animations";
+constexpr int kDefaultHttpPort = 8080;
 
 std::unique_ptr<ScreenControllerInterface> createScreen(bool use_dummy) {
   // decide runtime if the screen should be faked or not
@@ -36,6 +38,11 @@ int main(int argc, char **argv) {
   parser.setApplicationDescription(
       "Truncated Cube Lamp: neat idea for a lamp 👌");
   parser.addOption({{"d", "dummy-screen"}, "Use a dummy screen controller"});
+  parser.addOption({{"a", "address"},
+                    "IP address to listen to. Default is localhost IPv6",
+                    "host-address"});
+  parser.addOption(
+      {{"p", "port"}, "TCP port to listen on. Default is 8080", "host-port"});
   parser.process(app);
 
   // setup animation runner in seperate thread
@@ -57,8 +64,19 @@ int main(int argc, char **argv) {
   QObject::connect(runner_api.get(), &RunnerApi::run, &runner,
                    &AnimationRunner::runScript, Qt::DirectConnection);
 
+  // decide host IP and port
+  QHostAddress host_address(QHostAddress::LocalHostIPv6);
+  if (parser.isSet("address")) {
+    host_address = QHostAddress(parser.value("address"));
+  }
+  int port = kDefaultHttpPort;
+  if (parser.isSet("port")) {
+    port = parser.value("port").toInt();
+  }
+
   // setup http server with webpage and APIs
-  HttpServer http_server(std::move(scripts_api), std::move(runner_api));
+  HttpServer http_server(host_address, port, std::move(scripts_api),
+                         std::move(runner_api));
 
   return app.exec();
 }

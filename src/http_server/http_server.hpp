@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtHttpServer/QtHttpServer>
+#include <QtNetwork/QHostAddress>
 #include <memory>
 
 class ScriptsApi;
@@ -11,7 +12,8 @@ Q_DECLARE_LOGGING_CATEGORY(HttpServerLog)
 class HttpServer : public QObject {
   Q_OBJECT
  public:
-  explicit HttpServer(std::unique_ptr<ScriptsApi> scripts_api,
+  explicit HttpServer(QHostAddress host, int desired_port,
+                      std::unique_ptr<ScriptsApi> scripts_api,
                       std::unique_ptr<RunnerApi> runner_api);
 
   QHttpServerResponse servePageFromResource(const QString page);

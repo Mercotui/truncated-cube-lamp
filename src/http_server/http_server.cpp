@@ -11,11 +11,11 @@
 Q_LOGGING_CATEGORY(HttpServerLog, "http.server", QtInfoMsg)
 
 namespace {
-constexpr int kHttpPort = 8080;
 constexpr std::string_view kWebsiteResourceDir = ":/website";
 }  // namespace
 
-HttpServer::HttpServer(std::unique_ptr<ScriptsApi> scripts_api,
+HttpServer::HttpServer(QHostAddress host, int desired_port,
+                       std::unique_ptr<ScriptsApi> scripts_api,
                        std::unique_ptr<RunnerApi> runner_api)
     : scripts_api_(std::move(scripts_api)), runner_api_(std::move(runner_api)) {
   Q_INIT_RESOURCE(website);
@@ -34,11 +34,11 @@ HttpServer::HttpServer(std::unique_ptr<ScriptsApi> scripts_api,
   runner_api_->registerApi(&server_);
 
   // start listening
-  const auto port = server_.listen(QHostAddress::Any, kHttpPort);
-  if (port != kHttpPort) {
-    qCWarning(HttpServerLog)
-        << "Server failed to get port" << kHttpPort << "instead using" << port;
+  const auto port = server_.listen(host, desired_port);
+  if (port != desired_port) {
+    qCWarning(HttpServerLog) << "Server failed to get port" << desired_port;
   }
+  qCInfo(HttpServerLog) << "Listening on" << host.toString() << "port" << port;
 }
 
 void HttpServer::registerWebsiteFiles() {
