@@ -4,16 +4,16 @@
       <v-col class="mb-4">
         <CodeEditor v-bind:script_name=name @runInEmulator="runInEmulator" />
       </v-col>
-      <!-- <v-col class="mb-4">
+      <v-col class="mb-4">
         <LampEmulator/>
-      </v-col> -->
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
 import CodeEditor from '../components/CodeEditor';
-// import LampEmulator from '../components/LampEmulator';
+import LampEmulator from '../components/LampEmulator';
 
 export default {
   components: {
@@ -31,7 +31,7 @@ export default {
 
   methods: {
     runInEmulator: function (animation_script) {
-      // LampEmulator.run(animation_script)
+      LampEmulator.run(animation_script)
     }
   },
 };

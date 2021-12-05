@@ -1,0 +1,14 @@
+{
+    email <email>
+}
+
+lamp.mercotui.com {
+        tls {
+                dns cloudflare <apitoken>
+        }
+
+        root * /var/www/html
+        file_server
+
+        # reverse_proxy localhost:8080
+}

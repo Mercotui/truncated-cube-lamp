@@ -6,17 +6,34 @@ on: [push]
 jobs:
   lint:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/mercotui/derpicated-articated-ci-container:latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install pre-commit
-      run: pipx install pre-commit
+    - uses: actions/setup-python@v2
+    - uses: pre-commit/action@v2.0.3
 
-    - name: Run pre-commit
-      run: PATH=/github/home/.local/bin:$PATH pre-commit run --all-files
-
-    - uses: actions/cache@v1
+  build-website:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    container:
+      image: node:16
+    defaults:
+      run:
+        working-directory: ./website
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
       with:
-        path: ~/.cache/pre-commit
-        key: pre-commit|${{ hashFiles('.pre-commit-config.yaml') }}
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: install dependencies
+      run: npm install
+    - name: build
+      run: npm run build
+    - name: package
+      run: npm run package
+    - uses: actions/upload-artifact@v2
+      with:
+        name: truncated-cube-website
+        path: website/truncated-website-build.tar.gz
