@@ -18,8 +18,6 @@ HttpServer::HttpServer(QHostAddress host, int desired_port,
                        std::unique_ptr<ScriptsApi> scripts_api,
                        std::unique_ptr<RunnerApi> runner_api)
     : scripts_api_(std::move(scripts_api)), runner_api_(std::move(runner_api)) {
-  Q_INIT_RESOURCE(website);
-
   // serve all website files
   registerWebsiteFiles();
 

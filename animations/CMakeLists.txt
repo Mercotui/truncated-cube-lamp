@@ -1,4 +1,4 @@
-find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt6 COMPONENTS Core REQUIRED)
 
 set(CMAKE_AUTORCC ON)
 

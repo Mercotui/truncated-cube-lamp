@@ -1,21 +1,12 @@
 # truncated-cube-lamp
 
-Testing a cool idea for a lamp
+Truncated Cube Lamp: neat idea for a lamp 👌
 
 ## Build
 
-Get, make and install [QtHttpServer](https://code.qt.io/qt-extensions/qthttpserver.git),
-the `5.15` branch.
+Get Qt6 devel:
+- Fedora 35 `qt6-qtbase-devel qt6-qtbase-private-devel qt6-qtdeclarative-devel`
+- Ubuntu 21.04 `tbd`
 
-Qt 6 doesn't detect its code build tools,
-and HttpServer needs to be manually specified if you use a different install prefix:
-
-```bash
-mkdir build && cd build
-cmake .. \
-  -DQt6_DIR=~/Qt/6.1.0/gcc_64/lib/cmake/Qt6/ \
-  -DQt6CoreTools_DIR=/home/mercotui/Qt/6.1.0/gcc_64/lib/cmake/Qt6CoreTools \
-  -DQt6QmlTools_DIR=/home/mercotui/Qt/6.1.0/gcc_64/lib/cmake/Qt6QmlTools \
-  -DQt6GuiTools_DIR=/home/mercotui/Qt/6.1.0/gcc_64/lib/cmake/Qt6GuiTools
-make -j 8
-```
+Get, make, and install [QtHttpServer](https://code.qt.io/cgit/qt-extensions/qthttpserver.git/),
+as of Dec 8 2021 [this patch](https://codereview.qt-project.org/c/qt-extensions/qthttpserver/+/370525) is still needed.

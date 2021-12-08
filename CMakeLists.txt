@@ -14,6 +14,7 @@ if(BUILD_UNIT_TESTS)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG main
   )
   FetchContent_GetProperties(googletest)
 
@@ -43,6 +44,5 @@ if(NOT rpi_ws281x_POPULATED)
 endif()
 
 add_subdirectory(src)
-add_subdirectory(website)
 add_subdirectory(libraries)
 add_subdirectory(animations)

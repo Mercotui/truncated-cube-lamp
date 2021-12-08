@@ -1,4 +1,4 @@
-find_package(Qt5 COMPONENTS Core HttpServer Network REQUIRED)
+find_package(Qt6 COMPONENTS Core HttpServer Network REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
