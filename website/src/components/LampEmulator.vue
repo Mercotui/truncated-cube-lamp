@@ -73,7 +73,7 @@ import chroma from "chroma-js";
     setPixel: function (x, y, color){
       const original_color = chroma(color);
       const original_hsv_value = original_color.get('hsv.v');
-      const hsv_value_gamma_correction = 0.25;
+      const hsv_value_gamma_correction = 0.05;
 
       const corrected_hsv_value = Math.pow(original_hsv_value, hsv_value_gamma_correction);
       const corrected_color = original_color.set('hsv.v', corrected_hsv_value);
