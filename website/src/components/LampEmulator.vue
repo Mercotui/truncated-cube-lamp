@@ -7,17 +7,15 @@
         </h1>
 
         <canvas id="lamp_canvas" width="300" height="300"></canvas>
-
-        <v-switch
-          v-model="blur_lamp_switch"
-          label="Blur">
-        </v-switch>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+// This import is also used by the animation scripts
+import chroma from "chroma-js";
+
   const lamp_renderer = {
     canvas: undefined,
     ctx: undefined,
@@ -73,12 +71,61 @@
     },
 
     setPixel: function (x, y, color){
-      this.pixels[(y * this.emulated_width) + x] = color;
+      const original_color = chroma(color);
+      const original_hsv_value = original_color.get('hsv.v');
+      const hsv_value_gamma_correction = 0.25;
+
+      const corrected_hsv_value = Math.pow(original_hsv_value, hsv_value_gamma_correction);
+      const corrected_color = original_color.set('hsv.v', corrected_hsv_value);
+
+      this.pixels[(y * this.emulated_width) + x] = corrected_color.hex();
     },
 
     clear: function () {
       this.pixels.fill("black");
     },
+  };
+
+  const render_loop = {
+    animation_func: undefined,
+    timeout_ID: null,
+    running: false,
+    previous_frame_time: undefined,
+
+    start: function () {
+      this.running = true;
+      this.update();
+    },
+
+    stop: function () {
+      this.running = false;
+      clearTimeout(this.timeout_ID);
+    },
+
+    update: function () {
+      const now = new Date();
+
+      // prepare params
+      const params = {
+        previous_frame_time: this.previous_frame_time,
+        current_frame_time: now,
+        screen: lamp_renderer
+      };
+
+      // run the animation function!
+      this.animation.chroma = chroma;
+      const next = this.animation.update(params);
+
+      // check if loop continues
+      if (next == undefined || this.running == false) {
+        this.stop();
+      } else {
+        // call again after x ms
+        const now = new Date();
+        this.timeout_ID = setTimeout(this.update.bind(this), next - now);
+        this.previous_frame_time = now;
+      }
+    }
   };
 
   export default {
@@ -96,15 +143,15 @@
     },
 
     run: function (animation_script) {
-        lamp_renderer.clear();
-
-        try {
-          var animation_func = Function('screen', '"use strict";' + animation_script);
-          animation_func(lamp_renderer);
-        } catch(err) {
-          // TODO: add this to the UI?
-          console.log(err.toString())
-        }
+      render_loop.stop();
+      try {
+        var create_animation = Function('"use strict";\n' + animation_script + "\nreturn new Animation()");
+        render_loop.animation = create_animation();
+        render_loop.start();
+      } catch(err) {
+        // TODO: add this to the UI?
+        console.log(err)
+      }
     },
   }
 </script>

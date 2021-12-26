@@ -2,6 +2,13 @@
 
 ## Project setup
 
+For node>16 use:
+```bash
+export NODE_OPTIONS=--openssl-legacy-provider
+```
+
+Then use:
+
 ```bash
 npm install
 npm run serve

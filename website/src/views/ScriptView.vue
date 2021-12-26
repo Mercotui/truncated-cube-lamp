@@ -18,7 +18,7 @@ import LampEmulator from '../components/LampEmulator';
 export default {
   components: {
     CodeEditor,
-    // LampEmulator,
+    LampEmulator,
   },
 
   props: {

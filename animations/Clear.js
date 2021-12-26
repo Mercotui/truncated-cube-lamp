@@ -1,10 +1,12 @@
-(function (params) {
-    for (let x = 0; x < screen.resolution.width; x++) {
-        for (let y = 0; y < screen.resolution.height; y++) {
-            screen.setPixel(x, y, 'black');
+class Animation {
+  update (ctx) {
+      for (let x = 0; x < ctx.screen.resolution.width; x++) {
+        for (let y = 0; y < ctx.screen.resolution.height; y++) {
+          ctx.screen.setPixel(x, y, 'black');
         }
-    }
-    screen.draw();
+      }
+      ctx.screen.draw();
 
-    return undefined;
-})
+      return undefined;
+  }
+}

@@ -21,7 +21,7 @@
           <v-btn class="mx-1" elevation="2" :disabled="!save_enabled" v-on:click="save">Save</v-btn>
           <v-btn class="mx-1" elevation="2" v-on:click="save_overlay_opened = true">Save As</v-btn>
           <v-btn class="mx-1" elevation="2" :disabled="!delete_enabled" color="error" v-on:click="delete_overlay_opened = true">Delete</v-btn>
-          <v-btn class="mx-1" elevation="2" disabled color="success" v-on:click="runInEmulator">Run in Emulator</v-btn>
+          <v-btn class="mx-1" elevation="2" color="success" v-on:click="runInEmulator">Run in Emulator</v-btn>
         </div>
 
         <v-overlay :value="delete_overlay_opened">
