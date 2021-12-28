@@ -38,6 +38,9 @@ FetchContent_GetProperties(rpi_ws281x)
 if(NOT rpi_ws281x_POPULATED)
   message("Downloading rpi_ws281x")
   FetchContent_Populate(rpi_ws281x)
+  # this library uses a target name that is reserved by ctest,
+  # so we need to disable the library's test
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
   set(BUILD_TEST OFF)
   add_subdirectory(${rpi_ws281x_SOURCE_DIR} ${rpi_ws281x_BINARY_DIR})
   include_directories(${rpi_ws281x_SOURCE_DIR}/include ${rpi_ws281x_SOURCE_DIR})

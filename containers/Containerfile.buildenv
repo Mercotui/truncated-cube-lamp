@@ -1,7 +1,7 @@
 FROM ubuntu:21.10
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get --yes install sudo git build-essential cmake qtbase5-dev qtbase5-private-dev qtdeclarative5-dev
+RUN apt-get update && apt-get --yes install sudo git build-essential cmake ninja-build qtbase5-dev qtbase5-private-dev qtdeclarative5-dev
 
 WORKDIR /tmp/
 RUN git clone --depth 1 --branch 5.15 git://code.qt.io/qt-extensions/qthttpserver.git

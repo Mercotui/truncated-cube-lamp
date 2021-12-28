@@ -37,3 +37,19 @@ jobs:
       with:
         name: truncated-cube-website
         path: website/truncated-website-build.tar.gz
+
+  build-service:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    container:
+      image: ghcr.io/mercotui/truncated_buildenv:latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: mkdir build && cd build && cmake -GNinja ..
+    - name: build
+      working-directory: ./build
+      run: ninja
+    - name: test
+      working-directory: ./build
+      run: ctest
