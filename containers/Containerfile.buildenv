@@ -1,0 +1,17 @@
+FROM ubuntu:21.10
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get --yes install sudo git build-essential cmake qtbase5-dev qtbase5-private-dev qtdeclarative5-dev
+
+WORKDIR /tmp/
+RUN git clone --depth 1 --branch 5.15 git://code.qt.io/qt-extensions/qthttpserver.git
+WORKDIR ./qthttpserver/
+RUN git submodule update --init
+RUN mkdir ./build
+WORKDIR ./build/
+RUN qmake .. && make && make install
+
+# Unsure if needed, ingmar is dumb
+RUN useradd -u 1001 dumb --create-home && usermod -aG sudo dumb
+USER dumb
+WORKDIR /home/dumb
