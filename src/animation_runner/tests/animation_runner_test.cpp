@@ -1,10 +1,10 @@
+#include "../animation_runner.hpp"
+
 #include <QCoreApplication>
 #include <QTimer>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-
-#include "../animation_runner.hpp"
 #include "screen_controller_mock.hpp"
 
 using ::testing::_;
@@ -27,9 +27,17 @@ TEST(AnimationRunnerTest, DrawOne) {
   EXPECT_CALL(*mock_screen.get(), getResolution())
       .WillRepeatedly(Return(QSize(1, 1)));
   EXPECT_CALL(*mock_screen.get(), draw(Each(QColor("white")))).Times(1);
+  EXPECT_CALL(*mock_screen.get(), clear()).Times(1);
   AnimationRunner animation_runner(std::move(mock_screen));
 
-  animation_runner.runScript("screen.setPixel(0,0, \"white\"); screen.draw()");
+  animation_runner.runScript(
+      "class Animation {"
+      "  update (ctx) {"
+      "    ctx.screen.setPixel(0,0, \"white\"); "
+      "    ctx.screen.draw();"
+      "    return undefined;"
+      "  }"
+      "}");
 }
 
 TEST(AnimationRunnerTest, DrawHundred) {
@@ -37,15 +45,21 @@ TEST(AnimationRunnerTest, DrawHundred) {
   EXPECT_CALL(*mock_screen.get(), getResolution())
       .WillRepeatedly(Return(QSize(10, 10)));
   EXPECT_CALL(*mock_screen.get(), draw(Each(QColor("green")))).Times(1);
+  EXPECT_CALL(*mock_screen.get(), clear()).Times(1);
   AnimationRunner animation_runner(std::move(mock_screen));
 
   animation_runner.runScript(
-      "for (let x = 0; x < screen.resolution.width; x++) {"
-      "  for (let y = 0; y < screen.resolution.height; y++) {"
-      "    screen.setPixel(x,y, \"green\");"
+      "class Animation {"
+      "  update (ctx) {"
+      "    for (let x = 0; x < ctx.screen.resolution.width; x++) {"
+      "      for (let y = 0; y < ctx.screen.resolution.height; y++) {"
+      "        ctx.screen.setPixel(x,y, \"green\");"
+      "      }"
+      "    }"
+      "    ctx.screen.draw();"
+      "    return undefined;"
       "  }"
-      "}"
-      "screen.draw();");
+      "}");
 }
 
 TEST(AnimationRunnerTest, DrawOutOfBounds) {
@@ -53,15 +67,21 @@ TEST(AnimationRunnerTest, DrawOutOfBounds) {
   EXPECT_CALL(*mock_screen.get(), getResolution())
       .WillRepeatedly(Return(QSize(10, 10)));
   EXPECT_CALL(*mock_screen.get(), draw(Each(QColor("red")))).Times(1);
+  EXPECT_CALL(*mock_screen.get(), clear()).Times(1);
   AnimationRunner animation_runner(std::move(mock_screen));
 
   animation_runner.runScript(
-      "for (let x = -5; x < (screen.resolution.width + 5); x++) {"
-      "  for (let y = -5; y < (screen.resolution.height + 5); y++) {"
-      "    screen.setPixel(x,y, \"red\");"
+      "class Animation {"
+      "  update (ctx) {"
+      "    for (let x = -5; x < (ctx.screen.resolution.width + 5); x++) {"
+      "      for (let y = -5; y < (ctx.screen.resolution.height + 5); y++) {"
+      "        ctx.screen.setPixel(x,y, \"red\");"
+      "      }"
+      "    }"
+      "    ctx.screen.draw();"
+      "    return undefined;"
       "  }"
-      "}"
-      "screen.draw();");
+      "}");
 }
 
 int main(int argc, char **argv) {

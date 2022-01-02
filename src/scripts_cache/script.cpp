@@ -17,6 +17,10 @@ QString ScriptTypeToString(const Script::ScriptType type) {
     case Script::ScriptType::kTemporary: {
       return "temporary";
     }
+    default: {
+      Q_ASSERT(false);
+      return "";
+    }
   }
 }
 

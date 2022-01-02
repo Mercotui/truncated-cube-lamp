@@ -52,4 +52,4 @@ jobs:
       run: ninja
     - name: test
       working-directory: ./build
-      run: ctest
+      run: ctest --progress --rerun-failed --output-on-failure

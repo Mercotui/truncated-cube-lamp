@@ -3,6 +3,7 @@
 #include <QtNetwork/QHostAddress>
 
 #include "animation_runner/animation_runner.hpp"
+#include "animation_runner/animation_thread.hpp"
 #include "http_server/api/runner_api.hpp"
 #include "http_server/api/scripts_api.hpp"
 #include "http_server/http_server.hpp"
@@ -46,8 +47,8 @@ int main(int argc, char **argv) {
   parser.process(app);
 
   // setup animation runner in seperate thread
-  AnimationRunner runner(createScreen(parser.isSet("dummy-screen")));
-  runner.start();
+  AnimationRunner animation_runner(createScreen(parser.isSet("dummy-screen")));
+  AnimationThread animation_thread(&animation_runner);
 
   // cache and persistent storage
   auto scripts_cache = std::make_shared<ScriptsCache>();
@@ -57,12 +58,12 @@ int main(int argc, char **argv) {
 
   // setup rest APIs
   auto scripts_api = std::make_unique<ScriptsApi>(scripts_cache);
-  auto runner_api =
-      std::make_unique<RunnerApi>(scripts_cache, runner.getResolution());
+  auto runner_api = std::make_unique<RunnerApi>(
+      scripts_cache, animation_runner.getResolution());
 
   // connect runner API to animation runner
-  QObject::connect(runner_api.get(), &RunnerApi::run, &runner,
-                   &AnimationRunner::runScript, Qt::DirectConnection);
+  QObject::connect(runner_api.get(), &RunnerApi::run, &animation_runner,
+                   &AnimationRunner::runScript);
 
   // decide host IP and port
   QHostAddress host_address(QHostAddress::LocalHostIPv6);

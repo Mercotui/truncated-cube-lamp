@@ -14,28 +14,39 @@ namespace {
 constexpr int kMinimumFrameIntervalMS = 16;  // for max 60 fps
 constexpr std::string_view kLibrariesResourceDir = ":/libraries";
 constexpr auto kClearColor = "black";
+
+QJSValue createAnimationContext(QJSEngine *engine,
+                                const QDateTime &previous_frame_time,
+                                const QDateTime &current_frame_time,
+                                ScreenInterfaceJs *screen) {
+  auto context = engine->newObject();
+  context.setProperty("current_frame_time",
+                      engine->toScriptValue(current_frame_time));
+  context.setProperty("previous_frame_time",
+                      engine->toScriptValue(previous_frame_time));
+  context.setProperty("screen", engine->newQObject(screen));
+
+  return context;
+}
 }  // namespace
 
 AnimationRunner::AnimationRunner(
     std::unique_ptr<ScreenControllerInterface> screen_controller)
-    : engine_(),
-      screen_interface_js_(screen_controller->getResolution()),
+    : QObject(),
+      do_loop_(false),
+      loop_timer_(new QTimer(this)),
+      engine_(new QJSEngine(this)),
+      screen_interface_js_(
+          new ScreenInterfaceJs(screen_controller->getResolution(), this)),
       screen_(std::move(screen_controller)) {
   Q_INIT_RESOURCE(libraries);
   loadLibraries();
 
-  connect(this, &AnimationRunner::runScriptInThread, this,
-          &AnimationRunner::runScriptInternal, Qt::QueuedConnection);
+  engine_->installExtensions(QJSEngine::ConsoleExtension);
 
-  this->moveToThread(this);
-  engine_.moveToThread(this);
-  screen_interface_js_.moveToThread(this);
-  engine_.installExtensions(QJSEngine::ConsoleExtension);
-  engine_.globalObject().setProperty("screen",
-                                     engine_.newQObject(&screen_interface_js_));
-
-  connect(&screen_interface_js_, &ScreenInterfaceJs::draw,
-          [this]() { screen_->draw(screen_interface_js_.pixels()); });
+  connect(loop_timer_, &QTimer::timeout, this, &AnimationRunner::loop);
+  connect(screen_interface_js_, &ScreenInterfaceJs::draw,
+          [this]() { screen_->draw(screen_interface_js_->pixels()); });
 }
 
 AnimationRunner::~AnimationRunner() { Q_CLEANUP_RESOURCE(libraries); }
@@ -62,7 +73,7 @@ void AnimationRunner::loadLibraries() {
     QTextStream stream(&scriptFile);
     QString contents = stream.readAll();
     scriptFile.close();
-    auto result = engine_.evaluate(contents, file_path);
+    auto result = engine_->evaluate(contents, file_path);
     if (result.isError()) {
       qCWarning(AnimationRunnerLog) << "Loading" << file_path_without_resource
                                     << "failed:" << result.toString();
@@ -70,56 +81,79 @@ void AnimationRunner::loadLibraries() {
   }
 }
 
-void AnimationRunner::runScript(QString animation_script) {
-  stopScript();
-  emit runScriptInThread(animation_script);
-}
-
 void AnimationRunner::stopScript() {
-  engine_.setInterrupted(true);
+  engine_->setInterrupted(true);
   do_loop_ = false;
+  loop_timer_->stop();
 }
 
-void AnimationRunner::runScriptInternal(QString animation_script) {
-  screen_interface_js_.setAllPixels(kClearColor);
+void AnimationRunner::runScript(QString animation_script) {
+  // reset screen
+  screen_interface_js_->setAllPixels(kClearColor);
   screen_->clear();
 
-  engine_.setInterrupted(false);
+  // reset runner
+  engine_->setInterrupted(false);
   previous_frame_time_ = QDateTime::currentDateTime();
-  auto result = engine_.evaluate(animation_script);
-  if (result.isCallable()) {
-    loop(result);
+  animation_obj_ = QJSValue();
+
+  // create new animation runner from script
+  auto eval_result = engine_->evaluate("\"use strict\";\n" + animation_script +
+                                       "\nnew Animation();");
+  if (eval_result.isError()) {
+    // this error can be caused by the user, so it's only logged in debug mode
+    qCDebug(AnimationRunnerLog)
+        << "eval error at line" << eval_result.property("lineNumber").toInt()
+        << ":" << eval_result.toString();
+  } else if (eval_result.property("update").isCallable()) {
+    // everything seems fine, start loop
+    animation_obj_ = eval_result;
+    do_loop_ = true;
+    loop();
   } else {
-    qCDebug(AnimationRunnerLog) << "eval result" << result.toString();
+    qCDebug(AnimationRunnerLog)
+        << "Created instance does not have update function:"
+        << eval_result.toString();
   }
 }
 
-void AnimationRunner::loop(QJSValue animation_function) {
+void AnimationRunner::loop() {
   qCDebug(AnimationRunnerLog)
       << "looping on thread:" << QThread::currentThread()
       << "application thread is:" << QCoreApplication::instance()->thread();
 
-  do_loop_ = true;
-  while (do_loop_) {
-    auto animation_params = engine_.newObject();
-    auto current_frame_time = QDateTime::currentDateTime();
-    animation_params.setProperty("current_frame_time",
-                                 engine_.toScriptValue(current_frame_time));
-    animation_params.setProperty("previous_frame_time",
-                                 engine_.toScriptValue(previous_frame_time_));
-    previous_frame_time_ = current_frame_time;
+  // create context
+  auto current_frame_time = QDateTime::currentDateTime();
+  auto animation_params = createAnimationContext(
+      engine_, previous_frame_time_, current_frame_time, screen_interface_js_);
+  previous_frame_time_ = current_frame_time;
 
-    auto result = animation_function.call({animation_params});
-    if (result.isDate()) {
-      int requested_interval =
-          QDateTime::currentDateTime().msecsTo(result.toDateTime());
-      qCDebug(AnimationRunnerLog)
-          << "sleeping for ms" << requested_interval << "ms";
-      QThread::msleep(std::max(requested_interval, kMinimumFrameIntervalMS));
-    } else {
-      qCDebug(AnimationRunnerLog) << "eval result" << result.toString();
-      do_loop_ = false;
+  // run animation fucntion
+  auto animation_function = animation_obj_.property("update");
+  auto result =
+      animation_function.callWithInstance(animation_obj_, {animation_params});
+
+  // handle result
+  if (result.isDate()) {
+    int requested_interval =
+        QDateTime::currentDateTime().msecsTo(result.toDateTime());
+    int corrected_interval =
+        std::max(requested_interval, kMinimumFrameIntervalMS);
+
+    qCDebug(AnimationRunnerLog)
+        << "loop sleeping for " << corrected_interval << "ms";
+    // start timer for next loop itteration
+    if (do_loop_) {
+      loop_timer_->start(corrected_interval);
     }
+  } else if (result.isUndefined()) {
+    qCDebug(AnimationRunnerLog) << "got \"undefined\" loop ending";
+    do_loop_ = false;
+  } else {
+    qCDebug(AnimationRunnerLog)
+        << "loop error at line" << result.property("lineNumber").toInt() << ":"
+        << result.toString();
+    do_loop_ = false;
   }
 }
 

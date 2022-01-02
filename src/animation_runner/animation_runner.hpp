@@ -1,16 +1,17 @@
 #pragma once
 
-#include <QDateTime>
-#include <QJSEngine>
-#include <QSize>
-#include <QThread>
+#include <QtCore/QDateTime>
+#include <QtCore/QObject>
+#include <QtCore/QSize>
+#include <QtCore/QTimer>
+#include <QtQml/QJSEngine>
 #include <atomic>
 #include <memory>
 
 #include "screen_controller_interface.hpp"
 #include "screen_interface_js.hpp"
 
-class AnimationRunner : public QThread {
+class AnimationRunner : public QObject {
   Q_OBJECT
 
  public:
@@ -23,17 +24,15 @@ class AnimationRunner : public QThread {
   void stopScript();
   QSize getResolution();
 
- signals:
-  void runScriptInThread(QString animation_script);
-
  private:
-  void runScriptInternal(QString animation_script);
-  void loop(QJSValue animation_function);
+  void loop();
   void loadLibraries();
 
   std::atomic<bool> do_loop_;
-  QJSEngine engine_;
-  ScreenInterfaceJs screen_interface_js_;
+  QTimer* loop_timer_;
+  QJSEngine* engine_;
+  ScreenInterfaceJs* screen_interface_js_;
   std::unique_ptr<ScreenControllerInterface> screen_;
+  QJSValue animation_obj_;
   QDateTime previous_frame_time_;
 };

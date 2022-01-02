@@ -5,6 +5,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 add_library(animation_runner STATIC
   animation_runner.cpp
+  animation_thread.cpp
   screen_interface_js.cpp
 )
 
