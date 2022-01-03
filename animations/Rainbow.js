@@ -24,7 +24,7 @@ class Animation {
             let phase = x * this.phase_factor_x +
                         y * this.phase_factor_y +
                         delta_ms * this.angular_momentum_ms;
-            let color = this.chroma.hsl(phase % 360, 1, 0.1);
+            let color = chroma.hsl(phase % 360, 1, 0.1);
             params.screen.setPixel(x, y, color.hex('rgb'));
         }
     }

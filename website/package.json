@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --mode production",
+    "serve-dev": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build",
     "package": "tar -zcvf truncated-website-build.tar.gz -C dist .",
     "lint": "vue-cli-service lint"

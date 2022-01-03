@@ -43,7 +43,7 @@ AnimationRunner::AnimationRunner(
   loadLibraries();
 
   engine_->installExtensions(QJSEngine::ConsoleExtension);
-
+  loop_timer_->setSingleShot(true);
   connect(loop_timer_, &QTimer::timeout, this, &AnimationRunner::loop);
   connect(screen_interface_js_, &ScreenInterfaceJs::draw,
           [this]() { screen_->draw(screen_interface_js_->pixels()); });
@@ -75,8 +75,9 @@ void AnimationRunner::loadLibraries() {
     scriptFile.close();
     auto result = engine_->evaluate(contents, file_path);
     if (result.isError()) {
-      qCWarning(AnimationRunnerLog) << "Loading" << file_path_without_resource
-                                    << "failed:" << result.toString();
+      qCWarning(AnimationRunnerLog)
+          << "Loading" << file_path_without_resource << "failed at line"
+          << result.property("lineNumber").toInt() << ":" << result.toString();
     }
   }
 }
@@ -93,6 +94,7 @@ void AnimationRunner::runScript(QString animation_script) {
   screen_->clear();
 
   // reset runner
+  stopScript();
   engine_->setInterrupted(false);
   previous_frame_time_ = QDateTime::currentDateTime();
   animation_obj_ = QJSValue();

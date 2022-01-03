@@ -14,7 +14,7 @@
 
 namespace {
 constexpr auto kDefaultScriptsLocation = ":/animations";
-constexpr int kDefaultHttpPort = 8080;
+constexpr int kDefaultHttpPort = 3080;
 
 std::unique_ptr<ScreenControllerInterface> createScreen(bool use_dummy) {
   // decide runtime if the screen should be faked or not
