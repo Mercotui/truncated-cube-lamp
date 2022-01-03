@@ -109,11 +109,11 @@ import chroma from "chroma-js";
       const params = {
         previous_frame_time: this.previous_frame_time,
         current_frame_time: now,
-        screen: lamp_renderer
+        screen: lamp_renderer,
+        libs: {chroma: chroma}
       };
 
       // run the animation function!
-      this.animation.chroma = chroma;
       const next = this.animation.update(params);
 
       // check if loop continues

@@ -20,6 +20,9 @@ QJSValue createAnimationContext(QJSEngine *engine,
                                 const QDateTime &current_frame_time,
                                 ScreenInterfaceJs *screen) {
   auto context = engine->newObject();
+  auto libs = engine->newObject();
+  libs.setProperty("chroma", engine->globalObject().property("chroma"));
+  context.setProperty("libs", libs);
   context.setProperty("current_frame_time",
                       engine->toScriptValue(current_frame_time));
   context.setProperty("previous_frame_time",
