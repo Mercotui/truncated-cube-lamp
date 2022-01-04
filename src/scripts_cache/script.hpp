@@ -10,13 +10,15 @@ using ScriptCode = QString;
 
 class Script {
  public:
-  enum class ScriptType { kDefault, kAnimation, kImage, kTemporary };
+  enum class ScriptType { kDefault, kTemplate, kAnimation, kImage, kTemporary };
 
   Script() = default;
 
   Script(ScriptName name, ScriptCode code,
          std::unordered_set<ScriptType> types);
 
+  static QString scriptTypeToString(ScriptType type);
+  static std::optional<ScriptType> stringToScriptType(QString type);
   static std::optional<Script> fromJsonObject(QJsonObject json_object);
   QJsonObject toJsonObject() const;
 

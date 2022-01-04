@@ -53,8 +53,7 @@ int main(int argc, char **argv) {
   // cache and persistent storage
   auto scripts_cache = std::make_shared<ScriptsCache>();
   Q_INIT_RESOURCE(animations);
-  scripts_cache->loadDefaults(kDefaultScriptsLocation,
-                              Script::ScriptType::kAnimation);
+  scripts_cache->loadDefaults(kDefaultScriptsLocation);
 
   // setup rest APIs
   auto scripts_api = std::make_unique<ScriptsApi>(scripts_cache);

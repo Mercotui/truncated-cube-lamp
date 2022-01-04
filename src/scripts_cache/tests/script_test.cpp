@@ -1,11 +1,11 @@
+#include "../script.hpp"
+
 #include <QtCore/QCoreApplication>
 #include <QtCore/QJsonArray>
 #include <QtCore/QTimer>
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-
-#include "../script.hpp"
 
 using ::testing::_;
 using ::testing::Each;
@@ -41,10 +41,17 @@ TEST(ScriptTest, ShouldBeSaved) {
   auto script = Script("testname", "teststring", {Script::ScriptType::kImage});
   ASSERT_TRUE(script.shouldBeSaved());
 
+  // defaults should no be saved
   auto default_script =
       Script("testname", "teststring",
              {Script::ScriptType::kImage, Script::ScriptType::kDefault});
-  ASSERT_TRUE(script.shouldBeSaved());
+  ASSERT_FALSE(default_script.shouldBeSaved());
+
+  // templates should no be saved
+  auto template_script =
+      Script("testname", "teststring",
+             {Script::ScriptType::kImage, Script::ScriptType::kTemplate});
+  ASSERT_FALSE(template_script.shouldBeSaved());
 }
 
 int main(int argc, char **argv) {

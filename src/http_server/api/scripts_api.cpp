@@ -3,6 +3,7 @@
 #include <QtCore/QLoggingCategory>
 #include <utility>
 
+#include "script.hpp"
 #include "scripts_cache.hpp"
 
 using StatusCode = QHttpServerResponse::StatusCode;
@@ -28,9 +29,14 @@ void ScriptsApi::registerApi(QHttpServer* server) {
 
 QJsonObject ScriptsApi::handleRoot() {
   QJsonArray script_list;
-  for (const auto& script : scripts_cache_->getNames()) {
+  for (const auto& script_name : scripts_cache_->getNames()) {
+    QJsonArray type_names;
+    const auto& types = scripts_cache_->getTypesForScript(script_name);
+    for (const auto& type : types) {
+      type_names.append(Script::scriptTypeToString(type));
+    }
     script_list.append(
-        QJsonObject({{{"name", script}, {"type", "animation"}}}));
+        QJsonObject({{{"name", script_name}, {"type", type_names}}}));
   }
   return {{"scripts", script_list}};
 }

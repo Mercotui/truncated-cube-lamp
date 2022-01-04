@@ -9,6 +9,7 @@
 
 namespace {
 constexpr auto kDefaultSaveFile = "./animations.json";
+const std::unordered_set<Script::ScriptType> kNullScriptTypes;
 }  // namespace
 
 Q_LOGGING_CATEGORY(ScriptsCacheLog, "scriptscache", QtInfoMsg)
@@ -21,17 +22,38 @@ ScriptsCache::ScriptsCache(QString savefile) {
   }
 }
 
-void ScriptsCache::loadDefaults(const QString& dir, Script::ScriptType type) {
+void ScriptsCache::loadDefaults(const QString& dir) {
   qCInfo(ScriptsCacheLog) << "Loading Defaults from" << dir;
   for (const auto& script_info : QDir(dir).entryInfoList()) {
     QFile script_file(script_info.filePath());
     script_file.open(QIODevice::ReadOnly | QIODevice::Text);
     QByteArray script = script_file.readAll();
 
-    auto name = script_info.fileName();
-    name.chop(3);  // remove .js extension from script name
-    qCDebug(ScriptsCacheLog) << "Loading Default:" << name;
-    scripts_[name] = {name, script, {Script::ScriptType::kDefault, type}};
+    auto file_name = script_info.fileName();
+    // extract script name, types, and remove .js extension from script name
+    auto file_name_sections = file_name.split(".");
+    if (file_name_sections.length() >= 2) {
+      file_name_sections.pop_back();
+      auto name = file_name_sections.takeFirst();
+      qCDebug(ScriptsCacheLog) << "Loading Default:" << name;
+
+      // the rest of the file name should be script types
+      std::unordered_set<Script::ScriptType> types;
+      for (auto type_name : file_name_sections) {
+        auto type = Script::stringToScriptType(type_name);
+        if (type.has_value()) {
+          types.insert(type.value());
+        } else {
+          qCWarning(ScriptsCacheLog) << "File name" << file_name
+                                     << "contains unknown type:" << type_name;
+        }
+      }
+
+      scripts_[name] = {name, script, types};
+    } else {
+      qCWarning(ScriptsCacheLog)
+          << "File name does not contain name+extension:" << file_name;
+    }
   }
 }
 
@@ -114,6 +136,16 @@ std::optional<Script> ScriptsCache::get(const QString& name) const {
   } else {
     qCInfo(ScriptsCacheLog) << "Tried to get unknown script" << name;
     return std::nullopt;
+  }
+}
+
+const std::unordered_set<Script::ScriptType>& ScriptsCache::getTypesForScript(
+    const QString& name) const {
+  if (auto iter = scripts_.find(name); iter != scripts_.end()) {
+    return iter.value().types();
+  } else {
+    qCInfo(ScriptsCacheLog) << "Tried to get types of unknown script" << name;
+    return kNullScriptTypes;
   }
 }
 
