@@ -11,7 +11,7 @@ RUN mkdir ./build
 WORKDIR ./build/
 RUN qmake .. && make && make install
 
-# Unsure if needed, ingmar is dumb
+# Unsure if needed
 RUN useradd -u 1001 dumb --create-home && usermod -aG sudo dumb
 USER dumb
 WORKDIR /home/dumb

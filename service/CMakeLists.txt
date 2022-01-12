@@ -20,3 +20,7 @@ add_subdirectory(animation_runner)
 add_subdirectory(http_server)
 add_subdirectory(screen)
 add_subdirectory(scripts_cache)
+
+install(TARGETS truncated_cube_lamp RUNTIME DESTINATION "/usr/local/bin")
+install(FILES "truncated_cube_lamp.service" DESTINATION "/etc/systemd/system")
+install(DIRECTORY DESTINATION "/var/lib/truncated_cube_lamp")

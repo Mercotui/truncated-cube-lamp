@@ -81,7 +81,6 @@ QJsonObject Script::toJsonObject() const {
   json_object["name"] = name_;
   json_object["type"] = types_array;
   json_object["script"] = encoded_code;
-  qWarning() << json_object;
   return json_object;
 }
 

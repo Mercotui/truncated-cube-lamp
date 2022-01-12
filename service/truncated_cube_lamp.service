@@ -1,0 +1,11 @@
+[Unit]
+Description=Starts the truncated_cube_lamp application
+
+[Service]
+Restart=on-abnormal
+
+ExecStart=/usr/local/bin/truncated_cube_lamp
+WorkingDirectory=/var/lib/truncated_cube_lamp
+
+[Install]
+WantedBy=multi-user.target

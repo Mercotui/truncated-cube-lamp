@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
                    &AnimationRunner::runScript);
 
   // decide host IP and port
-  QHostAddress host_address(QHostAddress::LocalHostIPv6);
+  QHostAddress host_address(QHostAddress::LocalHost);
   if (parser.isSet("address")) {
     host_address = QHostAddress(parser.value("address"));
   }

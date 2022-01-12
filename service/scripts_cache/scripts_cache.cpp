@@ -105,6 +105,9 @@ void ScriptsCache::load(const QString& file_name) {
 void ScriptsCache::add(const Script& script) {
   const auto name = script.name();
   if (auto iter = scripts_.find(name); iter != scripts_.end()) {
+    if (!iter->shouldBeSaved()) {
+      qCWarning(ScriptsCacheLog) << "Can't overwrite script" << name;
+    }
     qCDebug(ScriptsCacheLog) << "Overwriting script" << name;
   } else {
     qCDebug(ScriptsCacheLog) << "Adding script" << name;

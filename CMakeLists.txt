@@ -46,6 +46,6 @@ if(NOT rpi_ws281x_POPULATED)
   include_directories(${rpi_ws281x_SOURCE_DIR}/include ${rpi_ws281x_SOURCE_DIR})
 endif()
 
-add_subdirectory(src)
+add_subdirectory(service)
 add_subdirectory(libraries)
 add_subdirectory(animations)

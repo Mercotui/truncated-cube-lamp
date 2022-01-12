@@ -1,0 +1,19 @@
+{
+  email <email>
+}
+
+<domain> {
+  tls {
+    dns cloudflare <apitoken>
+  }
+
+  root * /var/www/html
+  file_server
+
+  reverse_proxy /api/* {
+    to http://localhost:3080
+
+    header_up Host {upstream_hostport}
+    header_up X-Forwarded-Host {host}
+  }
+}

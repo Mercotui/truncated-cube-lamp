@@ -1,0 +1,14 @@
+:8000 {
+  reverse_proxy {
+    to http://localhost:8080
+
+    header_up Host {upstream_hostport}
+    header_up X-Forwarded-Host {host}
+  }
+  reverse_proxy /api/* {
+    to http://localhost:3080
+
+    header_up Host {upstream_hostport}
+    header_up X-Forwarded-Host {host}
+  }
+}

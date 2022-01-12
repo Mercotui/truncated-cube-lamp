@@ -1,5 +1,4 @@
-
-name: Articated CI
+name: Truncated Cube Lamp CI
 
 on: [push]
 
