@@ -23,6 +23,7 @@ class Script {
   QJsonObject toJsonObject() const;
 
   bool shouldBeSaved() const;
+  bool mayBeOverWritten() const;
   ScriptName name() const;
   ScriptCode code() const;
   const std::unordered_set<ScriptType>& types() const;

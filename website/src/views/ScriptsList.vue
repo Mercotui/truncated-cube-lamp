@@ -4,7 +4,7 @@
       <v-col class="mb-4">
         <v-list dense>
           <v-subheader>Images</v-subheader>
-          <v-list-item v-on:click="openDrawing('')">
+          <v-list-item v-on:click="openDrawing(image_template)">
             <v-list-item-content>
               <v-list-item-title>Draw</v-list-item-title>
             </v-list-item-content>
@@ -35,7 +35,7 @@
               </v-list-item-icon>
             </v-list-item>
 
-            <v-list-item v-on:click="openScript('')">
+            <v-list-item v-on:click="openScript(animation_template)">
               <v-list-item-content>
                 <v-list-item-title>New Script</v-list-item-title>
               </v-list-item-content>
@@ -63,15 +63,27 @@
     computed: {
       animations: function () {
         var animation_scripts = this.scripts.filter(script => {
-          return script.type.includes("animation") && !script.type.includes("template");
+          return script.type.includes("animation") && !script.type.includes("template") && !script.type.includes("temporary");
         })
         return Array.from(animation_scripts, script => script.name).sort();
       },
       images: function () {
         var image_scripts = this.scripts.filter(script => {
-          return script.type.includes("image") && !script.type.includes("template");
+          return script.type.includes("image") && !script.type.includes("template") && !script.type.includes("temporary");
         })
         return Array.from(image_scripts, script => script.name).sort();
+      },
+      animation_template: function () {
+        var animation_template_scripts = this.scripts.filter(script => {
+          return script.type.includes("animation") && script.type.includes("template");
+        })
+        return Array.from(animation_template_scripts, script => script.name).sort()[0];
+      },
+      image_template: function () {
+        var image_template_scripts = this.scripts.filter(script => {
+          return script.type.includes("image") && script.type.includes("template");
+        })
+        return Array.from(image_template_scripts, script => script.name).sort()[0];
       }
     },
 

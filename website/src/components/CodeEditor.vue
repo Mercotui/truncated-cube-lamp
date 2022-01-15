@@ -59,14 +59,14 @@ import utf8 from 'utf8';
       return {
         save_overlay_opened: false,
         delete_overlay_opened: false,
-        type: ["animation"],
-        content: "screen.setPixel(0, 0, 'red');\nscreen.setPixel(2, 5, 'green');\nscreen.setPixel(6, 6, 'blue');\nscreen.draw();",
+        type: ["template"],
+        content: "Loading",
       }
     },
 
     computed: {
       save_enabled: function () {
-        return !(this.type.includes("default") || this.script_name  === "")
+        return !(this.type.includes("default") || this.type.includes("template") || this.script_name  === "")
       },
       delete_enabled: function () {
         return !(this.type.includes("default") || this.type.includes("template"))
@@ -117,7 +117,8 @@ import utf8 from 'utf8';
       },
 
       saveAs: function () {
-        this.delete_overlay_opened = false;
+        this.save_overlay_opened = false;
+        this.type = ["animation"]
         this.save();
         this.$router.push('/scriptview/' + this.script_name);
       },

@@ -16,6 +16,7 @@ const router = new VueRouter({
   routes:  [
     { path: '/', component: ScriptsList },
     { path: '/drawing/', component: DrawView, props: true },
+    { path: '/drawing/:name', component: DrawView, props: true },
     { path: '/scriptview/', component: ScriptView, props: true },
     { path: '/scriptview/:name', component: ScriptView, props: true },
   ]

@@ -90,6 +90,11 @@ bool Script::shouldBeSaved() const {
            types_.contains(ScriptType::kTemplate));
 }
 
+bool Script::mayBeOverWritten() const {
+  return !(types_.contains(ScriptType::kDefault) ||
+           types_.contains(ScriptType::kTemplate));
+}
+
 ScriptName Script::name() const { return name_; }
 
 ScriptCode Script::code() const { return code_; }

@@ -8,7 +8,7 @@ class Animation {
   update (ctx) {
     for (var x = 0; x < this.resolution_x; x++){
       for (var y = 0; y < this.resolution_y; y++){
-        ctx.screen.setPixel(x, y, this.pixels[y][x]);
+        ctx.screen.setPixel(x, y, this.pixels[x][y]);
       }
     }
     ctx.screen.draw();
