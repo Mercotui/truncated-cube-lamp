@@ -78,5 +78,18 @@ int main(int argc, char **argv) {
   HttpServer http_server(host_address, port, std::move(scripts_api),
                          std::move(runner_api));
 
+  // prepare starup and shutdown scripts
+  if (auto script = scripts_cache->get("startup"); script.has_value()) {
+    animation_runner.setStartupAnimation(script->code());
+  }
+  if (auto script = scripts_cache->get("shutdown"); script.has_value()) {
+    animation_runner.setShutdownAnimation(script->code());
+  }
+  QTimer::singleShot(0, &animation_runner,
+                     &AnimationRunner::runStartupAnimation);
+  QObject::connect(&app, &QCoreApplication::aboutToQuit, &animation_runner,
+                   &AnimationRunner::runShutdownAnimation);
+
+  // run!
   return app.exec();
 }

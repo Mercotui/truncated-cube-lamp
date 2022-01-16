@@ -5,22 +5,29 @@
 Q_LOGGING_CATEGORY(AnimationThreadLog, "animation.thread", QtInfoMsg)
 
 namespace {
-constexpr unsigned kWaitTimeMS = 1000;
+constexpr unsigned kWaitTimeMS = 500;
+constexpr unsigned kTotalAllowedWaitTimeMS = 2000;
 }  // namespace
 
 AnimationThread::AnimationThread(AnimationRunner* runner)
-    : QThread(), runner(runner) {
+    : QThread(), runner_(runner) {
   start();
 
-  runner->moveToThread(this);
+  runner_->moveToThread(this);
 }
 
 AnimationThread::~AnimationThread() {
-  runner->stopScript();
-  quit();
+  unsigned total_wait_time = 0;
+  while (!QThread::wait(kWaitTimeMS)) {
+    total_wait_time += kWaitTimeMS;
 
-  while (!wait(kWaitTimeMS)) {
-    qCInfo(AnimationThreadLog)
-        << "Still waiting for animation thread to finish";
+    if (runner_->isLooping()) {
+      qCWarning(AnimationThreadLog) << "Waiting for animation to finish";
+    } else {
+      qCWarning(AnimationThreadLog) << "Waiting for animation thread to finish";
+    }
+    if (!runner_->isLooping() || total_wait_time > kTotalAllowedWaitTimeMS) {
+      QThread::quit();
+    }
   }
 }

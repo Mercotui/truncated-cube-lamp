@@ -163,3 +163,23 @@ void AnimationRunner::loop() {
 }
 
 QSize AnimationRunner::getResolution() { return screen_->getResolution(); }
+
+bool AnimationRunner::isLooping() { return do_loop_; }
+
+void AnimationRunner::runStartupAnimation() {
+  qCInfo(AnimationRunnerLog) << "Running startup animation";
+  runScript(startup_animation_);
+}
+
+void AnimationRunner::runShutdownAnimation() {
+  qCInfo(AnimationRunnerLog) << "Running shutdown animation";
+  runScript(shutdown_animation_);
+}
+
+void AnimationRunner::setStartupAnimation(QString animation) {
+  startup_animation_ = animation;
+}
+
+void AnimationRunner::setShutdownAnimation(QString animation) {
+  shutdown_animation_ = animation;
+}

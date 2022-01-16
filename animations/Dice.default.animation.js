@@ -23,9 +23,9 @@ class Animation {
     for (let x = 0; x < 8; x++) {
       for (let y = 0; y < 8; y++) {
         if (dice_representation[y][x]){
-          ctx.screen.setPixel(x, y, '#090909');
+          ctx.screen.setPixel(x, y, '#505050');
         } else {
-          ctx.screen.setPixel(x, y, 'black');
+          ctx.screen.setPixel(x, y, '#000');
         }
       }
     }

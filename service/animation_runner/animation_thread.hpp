@@ -12,5 +12,5 @@ class AnimationThread : public QThread {
   virtual ~AnimationThread();
 
  private:
-  AnimationRunner* runner;
+  AnimationRunner* runner_;
 };

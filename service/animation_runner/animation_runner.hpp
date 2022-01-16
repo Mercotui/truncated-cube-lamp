@@ -23,11 +23,19 @@ class AnimationRunner : public QObject {
   void runScript(QString animation_script);
   void stopScript();
   QSize getResolution();
+  bool isLooping();
+
+  void runStartupAnimation();
+  void runShutdownAnimation();
+  void setStartupAnimation(QString animation);
+  void setShutdownAnimation(QString animation);
 
  private:
   void loop();
   void loadLibraries();
 
+  QString startup_animation_;
+  QString shutdown_animation_;
   std::atomic<bool> do_loop_;
   QTimer* loop_timer_;
   QJSEngine* engine_;
