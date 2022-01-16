@@ -62,7 +62,8 @@ import chroma from "chroma-js";
         for (let y = 0; y < this.height; y++) {
           const canvas_x = x * this.emulated_pixel_size;
           const canvas_y = y * this.emulated_pixel_size;
-          const color = this.pixels[(y * this.emulated_width) + x];
+          const inverted_pixel_y = (this.emulated_height - 1) - y;
+          const color = this.pixels[(inverted_pixel_y * this.emulated_width) + x];
 
           this.ctx.fillStyle = color;
           this.ctx.fillRect(canvas_x, canvas_y, this.emulated_pixel_size, this.emulated_pixel_size);

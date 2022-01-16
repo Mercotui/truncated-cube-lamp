@@ -45,10 +45,11 @@
           const canvas_y = element_relative_y * this.canvas.height / this.canvas.clientHeight;
           const pixel_x = Math.floor(canvas_x);
           const pixel_y = Math.floor(canvas_y);
+          const pixel_y_inverted = (this.height - 1) - pixel_y;
 
           this.$emit('setPixel', {
             x: pixel_x,
-            y: pixel_y,
+            y: pixel_y_inverted,
             color: this.color,
           });
         })
@@ -61,7 +62,7 @@
 
         for (let x = 0; x < this.width; x++) {
           for (let y = 0; y < this.height; y++) {
-            var color = this.pixels[y][x];
+            var color = this.pixels[(this.height-1) - y][x];
             this.ctx.fillStyle = color;
             this.ctx.fillRect(x, y, 1, 1);
           }
