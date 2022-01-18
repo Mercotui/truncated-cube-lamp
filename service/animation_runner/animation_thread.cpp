@@ -22,11 +22,12 @@ AnimationThread::~AnimationThread() {
     total_wait_time += kWaitTimeMS;
 
     if (runner_->isLooping()) {
-      qCWarning(AnimationThreadLog) << "Waiting for animation to finish";
+      qCInfo(AnimationThreadLog) << "Waiting for animation to finish";
     } else {
-      qCWarning(AnimationThreadLog) << "Waiting for animation thread to finish";
+      qCInfo(AnimationThreadLog) << "Waiting for animation thread to finish";
     }
     if (!runner_->isLooping() || total_wait_time > kTotalAllowedWaitTimeMS) {
+      qCInfo(AnimationThreadLog) << "Quiting animation thread";
       QThread::quit();
     }
   }

@@ -11,6 +11,7 @@
 #include "screen/screen_controller.hpp"
 #include "scripts_cache/script.hpp"
 #include "scripts_cache/scripts_cache.hpp"
+#include "signal_monitor.hpp"
 
 namespace {
 constexpr auto kDefaultScriptsLocation = ":/animations";
@@ -45,6 +46,14 @@ int main(int argc, char **argv) {
   parser.addOption(
       {{"p", "port"}, "TCP port to listen on. Default is 8080", "host-port"});
   parser.process(app);
+
+  // Setup clean exit on SIGINT and SIGTERM
+  SignalMonitor signal_monitor;
+  signal_monitor.registerSignals({SIGTERM, SIGINT});
+  QObject::connect(&signal_monitor, &SignalMonitor::sigInt, &app,
+                   QCoreApplication::quit);
+  QObject::connect(&signal_monitor, &SignalMonitor::sigTerm, &app,
+                   QCoreApplication::quit);
 
   // setup animation runner in seperate thread
   AnimationRunner animation_runner(createScreen(parser.isSet("dummy-screen")));
