@@ -82,6 +82,10 @@ import chroma from "chroma-js";
       this.pixels[(y * this.emulated_width) + x] = corrected_color.hex();
     },
 
+    setAllPixels: function (color) {
+      this.pixels.fill(color);
+    },
+
     clear: function () {
       this.pixels.fill("black");
     },
