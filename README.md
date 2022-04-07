@@ -15,3 +15,12 @@ branch 5.15.
 Then you use cmake to build the service.
 
 The website requires NPM, look in the website directory for more details.
+
+### Git Metarepo
+
+Some dependencies are installed as git repository by [metarepo](https://github.com/blejdfist/git-metarepo).
+Once installed, run:
+
+```bash
+git meta sync
+```
