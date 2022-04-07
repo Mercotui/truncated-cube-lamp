@@ -1,0 +1,4 @@
+repos:
+- path: distro/buildroot
+  track: 2022.02.x
+  url: git://git.busybox.net/buildroot
