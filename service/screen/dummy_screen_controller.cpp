@@ -1,8 +1,6 @@
-#include "dummy_screen_controller.hpp"
+#include "screen/dummy_screen_controller.hpp"
 
 #include <QLoggingCategory>
-
-#include "./ws2811.h"
 
 namespace {
 constexpr int kScreenWidth = 8;

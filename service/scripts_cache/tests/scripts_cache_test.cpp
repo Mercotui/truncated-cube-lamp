@@ -4,8 +4,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-
-#include "../script.hpp"
+#include "scripts_cache/script.hpp"
 
 using ::testing::_;
 using ::testing::Each;

@@ -8,5 +8,3 @@ add_library(signal_monitor STATIC
 )
 
 target_link_libraries(signal_monitor Qt::Core)
-
-target_include_directories(signal_monitor INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

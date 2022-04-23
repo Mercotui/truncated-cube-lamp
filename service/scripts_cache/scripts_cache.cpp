@@ -1,4 +1,4 @@
-#include "scripts_cache.hpp"
+#include "scripts_cache/scripts_cache.hpp"
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>

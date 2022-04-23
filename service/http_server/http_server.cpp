@@ -1,12 +1,12 @@
-#include "http_server.hpp"
+#include "http_server/http_server.hpp"
 
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QStringLiteral>
 #include <string_view>
 #include <utility>
 
-#include "api/runner_api.hpp"
-#include "api/scripts_api.hpp"
+#include "http_server/api/runner_api.hpp"
+#include "http_server/api/scripts_api.hpp"
 
 Q_LOGGING_CATEGORY(HttpServerLog, "http.server", QtInfoMsg)
 

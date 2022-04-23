@@ -1,4 +1,4 @@
-#include "animation_thread.hpp"
+#include "animation_runner/animation_thread.hpp"
 
 #include <QtCore/QLoggingCategory>
 

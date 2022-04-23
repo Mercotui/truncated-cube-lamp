@@ -1,11 +1,11 @@
-#include "../animation_runner.hpp"
+#include "animation_runner/animation_runner.hpp"
 
 #include <QCoreApplication>
 #include <QTimer>
 
+#include "animation_runner/tests/screen_controller_mock.hpp"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "screen_controller_mock.hpp"
 
 using ::testing::_;
 using ::testing::Each;

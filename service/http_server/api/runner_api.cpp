@@ -1,10 +1,10 @@
-#include "runner_api.hpp"
+#include "http_server/api/runner_api.hpp"
 
 #include <QtCore/QJsonObject>
 #include <QtCore/QLoggingCategory>
 #include <utility>
 
-#include "scripts_cache.hpp"
+#include "scripts_cache/scripts_cache.hpp"
 
 using StatusCode = QHttpServerResponse::StatusCode;
 

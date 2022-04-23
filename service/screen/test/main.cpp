@@ -1,8 +1,8 @@
 #include <QtCore/QThread>
 #include <QtCore/QtCore>
 
-#include "../screen_controller.hpp"
-#include "user_interface.hpp"
+#include "screen/screen_controller.hpp"
+#include "screen/test/user_interface.hpp"
 
 using Button = UserInterface::Button;
 
@@ -30,7 +30,9 @@ void changeCoordinates(const Button button, QPoint* coordinates,
           std::clamp(coordinates->x() + 1, 0, resolution.width() - 1));
       break;
     }
-    default: { break; }
+    default: {
+      break;
+    }
   }
 }
 
@@ -63,7 +65,9 @@ void pixelChangeColor(const Button button, std::vector<QColor>* pixels,
       }
       break;
     }
-    default: { break; }
+    default: {
+      break;
+    }
   }
 }
 }  // namespace
