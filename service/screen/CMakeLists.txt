@@ -8,7 +8,6 @@ add_library(screen STATIC
   dummy_screen_controller.cpp
 )
 
-target_include_directories(screen INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(screen ws2811 Qt::Core Qt::Gui)
 
 IF(BUILD_SCREEN_TEST)

@@ -1,4 +1,4 @@
-#include "screen_interface_js.hpp"
+#include "animation_runner/screen_interface_js.hpp"
 
 #include <QColor>
 #include <QLoggingCategory>

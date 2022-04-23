@@ -1,4 +1,4 @@
-#include "animation_runner.hpp"
+#include "animation_runner/animation_runner.hpp"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>

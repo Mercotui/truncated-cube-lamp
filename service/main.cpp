@@ -11,7 +11,7 @@
 #include "screen/screen_controller.hpp"
 #include "scripts_cache/script.hpp"
 #include "scripts_cache/scripts_cache.hpp"
-#include "signal_monitor.hpp"
+#include "signal_monitor/signal_monitor.hpp"
 
 namespace {
 constexpr auto kDefaultScriptsLocation = ":/animations";

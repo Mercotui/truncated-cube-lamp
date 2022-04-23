@@ -1,4 +1,4 @@
-#include "screen_controller.hpp"
+#include "screen/screen_controller.hpp"
 
 #include <QLoggingCategory>
 

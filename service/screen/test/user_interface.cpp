@@ -1,6 +1,7 @@
-#include "user_interface.hpp"
+#include "screen/test/user_interface.hpp"
 
 #include <ncurses.h>
+
 #include <utility>
 
 namespace {

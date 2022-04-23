@@ -8,8 +8,8 @@
 #include <atomic>
 #include <memory>
 
-#include "screen_controller_interface.hpp"
-#include "screen_interface_js.hpp"
+#include "animation_runner/screen_interface_js.hpp"
+#include "screen/screen_controller_interface.hpp"
 
 class AnimationRunner : public QObject {
   Q_OBJECT

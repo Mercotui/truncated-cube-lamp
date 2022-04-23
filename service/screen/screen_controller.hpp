@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "screen_controller_interface.hpp"
+#include "screen/screen_controller_interface.hpp"
 
 struct ws2811_t;
 

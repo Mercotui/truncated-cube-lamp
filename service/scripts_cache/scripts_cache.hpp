@@ -5,7 +5,7 @@
 #include <optional>
 #include <unordered_set>
 
-#include "script.hpp"
+#include "scripts_cache/script.hpp"
 
 class ScriptsCache {
  public:

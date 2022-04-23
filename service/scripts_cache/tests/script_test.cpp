@@ -1,4 +1,4 @@
-#include "../script.hpp"
+#include "scripts_cache/script.hpp"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QJsonArray>

@@ -2,7 +2,7 @@
 
 #include <QtCore/QThread>
 
-#include "animation_runner.hpp"
+#include "animation_runner/animation_runner.hpp"
 
 class AnimationThread : public QThread {
   Q_OBJECT

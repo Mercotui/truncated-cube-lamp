@@ -1,10 +1,10 @@
-#include "scripts_api.hpp"
+#include "http_server/api/scripts_api.hpp"
 
 #include <QtCore/QLoggingCategory>
 #include <utility>
 
-#include "script.hpp"
-#include "scripts_cache.hpp"
+#include "scripts_cache/script.hpp"
+#include "scripts_cache/scripts_cache.hpp"
 
 using StatusCode = QHttpServerResponse::StatusCode;
 using Method = QHttpServerRequest::Method;

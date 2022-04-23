@@ -4,6 +4,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+include_directories(${CMAKE_SOURCE_DIR}/service)
 
 add_executable(truncated_cube_lamp
     main.cpp

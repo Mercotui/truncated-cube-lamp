@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "screen_controller_interface.hpp"
+#include "screen/screen_controller_interface.hpp"
 
 class DummyScreenController final : public ScreenControllerInterface {
  public:
