@@ -1,7 +1,12 @@
-FROM ubuntu:21.10
+FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get --yes install sudo git build-essential cmake ninja-build qtbase5-dev qtbase5-private-dev qtdeclarative5-dev
+RUN apt-get update && \
+  apt-get --yes install \
+    sudo git build-essential cmake ninja-build qtbase5-dev qtbase5-private-dev qtdeclarative5-dev \
+    python3 python3-pip
+
+RUN pip3 install --upgrade metarepo
 
 WORKDIR /tmp/
 RUN git clone --depth 1 --branch 5.15 git://code.qt.io/qt-extensions/qthttpserver.git
@@ -10,8 +15,3 @@ RUN git submodule update --init
 RUN mkdir ./build
 WORKDIR ./build/
 RUN qmake .. && make && make install
-
-# Unsure if needed
-RUN useradd -u 1001 dumb --create-home && usermod -aG sudo dumb
-USER dumb
-WORKDIR /home/dumb

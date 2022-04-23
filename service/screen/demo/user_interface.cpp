@@ -1,4 +1,4 @@
-#include "screen/test/user_interface.hpp"
+#include "screen/demo/user_interface.hpp"
 
 #include <ncurses.h>
 

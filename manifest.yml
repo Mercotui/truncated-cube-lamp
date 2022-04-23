@@ -2,3 +2,9 @@ repos:
 - path: distro/buildroot
   track: 2022.02.x
   url: git://git.busybox.net/buildroot
+- path: service/thirdparty/googletest
+  track: main
+  url: https://github.com/google/googletest.git
+- path: service/thirdparty/rpi_ws281x
+  track: master
+  url: https://github.com/jgarff/rpi_ws281x.git

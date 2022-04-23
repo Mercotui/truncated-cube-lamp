@@ -44,8 +44,10 @@ jobs:
       image: ghcr.io/mercotui/truncated_buildenv:latest
     steps:
     - uses: actions/checkout@v2
+    - name: install dependencies
+      run: git meta sync
     - name: configure
-      run: mkdir build && cd build && cmake -GNinja ..
+      run: mkdir build && cd build && cmake -GNinja ../service
     - name: build
       working-directory: ./build
       run: ninja
