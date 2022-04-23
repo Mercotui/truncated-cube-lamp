@@ -1,8 +1,8 @@
 #include <QtCore/QThread>
 #include <QtCore/QtCore>
 
+#include "screen/demo/user_interface.hpp"
 #include "screen/screen_controller.hpp"
-#include "screen/test/user_interface.hpp"
 
 using Button = UserInterface::Button;
 

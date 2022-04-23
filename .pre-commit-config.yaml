@@ -9,9 +9,10 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/igorshubovych/markdownlint-cli
-  rev: v0.26.0
+  rev: v0.31.1
   hooks:
   - id: markdownlint
+    args: [--disable=MD013]
 
 - repo: https://github.com/cheshirekow/cmake-format-precommit
   rev: v0.6.13

@@ -10,6 +10,6 @@ add_library(screen STATIC
 
 target_link_libraries(screen ws2811 Qt::Core Qt::Gui)
 
-IF(BUILD_SCREEN_TEST)
-  add_subdirectory(test)
+IF(BUILD_SCREEN_DEMO)
+  add_subdirectory(demo)
 ENDIF()
