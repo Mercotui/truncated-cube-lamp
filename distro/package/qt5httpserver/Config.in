@@ -1,0 +1,5 @@
+config BR2_PACKAGE_QT5HTTPSERVER
+        bool "Truncated Cube Lamp Service"
+        select BR2_PACKAGE_QT5
+        help
+          Qt Extension: Qt HTTP Server

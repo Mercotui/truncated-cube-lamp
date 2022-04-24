@@ -1,0 +1,8 @@
+config BR2_PACKAGE_TRUNCATED_CUBE_LAMP_SERVICE
+        bool "Truncated Cube Lamp Service"
+        select BR2_PACKAGE_QT5
+        select BR2_PACKAGE_QT5DECLARATIVE
+        select BR2_PACKAGE_QT5BASE_GUI
+        select BR2_PACKAGE_QT5HTTPSERVER
+        help
+          The backend service for the truncated cube lamp API.
