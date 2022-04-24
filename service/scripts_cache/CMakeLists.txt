@@ -10,6 +10,6 @@ add_library(scripts_cache STATIC
 
 target_link_libraries(scripts_cache Qt::Core)
 
-if(BUILD_UNIT_TESTS)
+if(BUILD_TESTS)
   add_subdirectory(tests)
-endif(BUILD_UNIT_TESTS)
+endif(BUILD_TESTS)

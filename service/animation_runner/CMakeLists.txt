@@ -1,4 +1,4 @@
-find_package(Qt5 COMPONENTS Core Gui Qml REQUIRED)
+find_package(Qt5 COMPONENTS Core Qml REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -10,8 +10,8 @@ add_library(animation_runner STATIC
 )
 
 target_link_libraries(animation_runner js_libraries screen
-                      Qt::Core Qt::Gui Qt::Qml)
+                      Qt::Core Qt::Qml)
 
-if(BUILD_UNIT_TESTS)
+if(BUILD_TESTS)
   add_subdirectory(tests)
-endif(BUILD_UNIT_TESTS)
+endif(BUILD_TESTS)

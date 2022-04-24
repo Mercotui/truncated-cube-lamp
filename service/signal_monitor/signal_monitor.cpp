@@ -1,6 +1,7 @@
 #include "signal_monitor/signal_monitor.hpp"
 
 #include <sys/socket.h>
+#include <unistd.h>
 
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QSocketNotifier>
