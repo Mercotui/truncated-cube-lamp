@@ -1,10 +1,12 @@
+# To configure TLS please replace :80 with the domain,
+# provide a cloudflare API token, and enter a valid admin email
 {
-  email <email>
+  email placeholderEmail
 }
 
-<domain> {
+:80 {
   tls {
-    dns cloudflare <apitoken>
+    dns cloudflare placeholderApiToken
   }
 
   root * /var/www/html
