@@ -1,0 +1,6 @@
+config BR2_PACKAGE_POWERBUTTON
+        bool "Powerbutton"
+        depends on BR2_PACKAGE_PYTHON3
+        select BR2_PACKAGE_PYTHON_RPI_GPIO
+        help
+          A powerbutton service written in python, using gpio and systemd.
