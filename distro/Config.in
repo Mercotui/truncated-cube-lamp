@@ -1,3 +1,4 @@
 source "$BR2_EXTERNAL_TRUNCATED_CUBE_LINUX_PATH/package/caddy/Config.in"
+source "$BR2_EXTERNAL_TRUNCATED_CUBE_LINUX_PATH/package/powerbutton/Config.in"
 source "$BR2_EXTERNAL_TRUNCATED_CUBE_LINUX_PATH/package/qt5httpserver/Config.in"
 source "$BR2_EXTERNAL_TRUNCATED_CUBE_LINUX_PATH/package/truncated_cube_lamp_service/Config.in"
