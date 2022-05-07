@@ -1,0 +1,4 @@
+config BR2_PACKAGE_TRUNCATED_CUBE_LAMP_WEBSITE
+        bool "Truncated Cube Lamp Website"
+        help
+          The frontend for the truncated cube lamp.
