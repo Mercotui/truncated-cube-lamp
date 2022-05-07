@@ -19,7 +19,7 @@ define CADDY_INSTALL_TARGET_CMDS
 endef
 
 define CADDY_USERS
-    caddy -1 caddy -1 * /home/caddy - - www "Caddy web server"
+    caddy -1 caddy -1 * /home/caddy - - www-data "Caddy web server"
 endef
 
 define CADDY_PERMISSIONS
