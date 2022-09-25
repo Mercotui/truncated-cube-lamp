@@ -16,8 +16,10 @@
 [Unit]
 Description=Caddy
 Documentation=https://caddyserver.com/docs/
-After=network.target network-online.target
-Requires=network-online.target
+# TODO(menno 25.09.2022) network-online.target seems to conflict with IWD, so disabled until systemd.networkd and IWD work out their race
+After=network.target
+# network-online.target
+# Requires=network-online.target
 
 [Service]
 Type=notify
