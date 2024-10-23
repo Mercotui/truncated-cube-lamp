@@ -1,9 +1,9 @@
 #include "animation_runner/screen_interface_js.hpp"
 
-#include <QColor>
-#include <QLoggingCategory>
-#include <QObject>
-#include <QSize>
+#include <QtGui/QColor>
+#include <QtCore/QLoggingCategory>
+#include <QtCore/QObject>
+#include <QtCore/QSize>
 #include <vector>
 
 Q_LOGGING_CATEGORY(ScreenInterfaceLog, "animation.screeninterface", QtInfoMsg)

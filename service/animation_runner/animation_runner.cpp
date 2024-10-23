@@ -1,11 +1,11 @@
 #include "animation_runner/animation_runner.hpp"
 
 #include <QtCore/QCoreApplication>
-#include <QtCore/QDir>
 #include <QtCore/QDirIterator>
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QThread>
 #include <algorithm>
+#include <memory>
 #include <utility>
 
 Q_LOGGING_CATEGORY(AnimationRunnerLog, "animation.runner", QtInfoMsg)

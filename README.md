@@ -29,7 +29,7 @@ class Animation {
 }
 ```
 
-## Dependencies:
+## Dependencies
 
 The API backend in written in Qt, because it has a nice and easy to use Javascript engine 🤷.
 

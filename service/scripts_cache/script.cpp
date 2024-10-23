@@ -2,7 +2,6 @@
 
 #include <QtCore/QJsonArray>
 #include <unordered_set>
-#include <utility>
 
 Script::Script(ScriptName name, ScriptCode code,
                std::unordered_set<ScriptType> types)

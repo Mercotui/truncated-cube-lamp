@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QColor>
-#include <QSize>
+#include <QtGui/QColor>
+#include <QtCore/QSize>
 #include <vector>
 
 class ScreenControllerInterface {

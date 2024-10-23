@@ -1,6 +1,7 @@
 #include <QtCore/QCache>
 #include <QtCore/QtCore>
-#include <QtNetwork/QHostAddress>
+#include <memory>
+#include <utility>
 
 #include "animation_runner/animation_runner.hpp"
 #include "animation_runner/animation_thread.hpp"

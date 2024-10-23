@@ -1,6 +1,7 @@
 #include "screen/screen_controller.hpp"
 
-#include <QLoggingCategory>
+#include <QtCore/QLoggingCategory>
+#include <vector>
 
 #include "thirdparty/rpi_ws281x/ws2811.h"
 
