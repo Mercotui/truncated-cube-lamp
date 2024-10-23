@@ -1,56 +1,58 @@
 name: Truncated Cube Lamp CI
 
-on: [push]
+on: [ push ]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-    - uses: pre-commit/action@v2.0.3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: pre-commit/action@v3.0.1
 
   build-website:
     runs-on: ubuntu-latest
-    needs: [lint]
+    needs: [ lint ]
     container:
-      image: node:16
+      image: node:22
     defaults:
       run:
         working-directory: ./website
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - name: install dependencies
-      run: npm install
-    - name: build
-      run: npm run build
-    - name: package
-      run: npm run package
-    - uses: actions/upload-artifact@v2
-      with:
-        name: truncated-cube-website
-        path: website/truncated-website-build.tar.gz
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: install dependencies
+        run: npm install
+      - name: build
+        run: npm run build
+      - name: package
+        run: npm run package
+      - uses: actions/upload-artifact@v3
+        with:
+          name: truncated-cube-website
+          path: website/truncated-website-build.tar.gz
 
   build-service:
     runs-on: ubuntu-latest
-    needs: [lint]
+    needs: [ lint ]
     container:
       image: ghcr.io/mercotui/truncated_buildenv:latest
     steps:
-    - uses: actions/checkout@v2
-    - name: install dependencies
-      run: git meta sync
-    - name: configure
-      run: mkdir build && cd build && cmake -GNinja ../service
-    - name: build
-      working-directory: ./build
-      run: ninja
-    - name: test
-      working-directory: ./build
-      run: ctest --progress --rerun-failed --output-on-failure
+      - uses: actions/checkout@v4
+      - name: install dependencies
+        run: git meta sync
+      - name: configure
+        run: mkdir build && cd build && cmake -GNinja ../service
+      - name: build
+        working-directory: ./build
+        run: ninja
+      - name: test
+        working-directory: ./build
+        run: ctest --progress --rerun-failed --output-on-failure
