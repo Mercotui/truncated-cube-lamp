@@ -1,32 +1,42 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
+/**
+ * plugins/vuetify.js
+ *
+ * Framework documentation: https://vuetifyjs.com`
+ */
 
-Vue.use(Vuetify);
+// Styles
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
+
+// Composables
+import {createVuetify} from 'vuetify'
 
 const dark_theme_query = window.matchMedia('(prefers-color-scheme: dark)')
 
-export default new Vuetify({
+// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
+export default createVuetify({
   theme: {
+    defaultTheme: 'dark',
     dark: dark_theme_query.matches,
     themes: {
       light: {
-        primary: "#B87333",
-        secondary: "#3378B8",
-        accent: "#b8b633",
-        error: "#b83335",
-        success: "#78b833",
+        colors: {
+          primary: "#B87333",
+          secondary: "#3378B8",
+          accent: "#b8b633",
+          error: "#b83335",
+          success: "#78b833",
+        },
       },
       dark: {
-        primary: "#B87333",
-        secondary: "#3378B8",
-        accent: "#b8b633",
-        error: "#b83335",
-        success: "#78b833",
+        colors: {
+          primary: "#B87333",
+          secondary: "#3378B8",
+          accent: "#b8b633",
+          error: "#b83335",
+          success: "#78b833",
+        },
       },
     },
   },
-});
-
-dark_theme_query.addEventListener('change', (dark_theme_event) => {
-  Vuetify.framework.theme.dark = dark_theme_event.matches
 })
