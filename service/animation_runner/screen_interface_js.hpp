@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QColor>
-#include <QObject>
-#include <QSize>
+#include <QtGui/QColor>
+#include <QtCore/QObject>
+#include <QtCore/QSize>
 #include <vector>
 
 class ScreenInterfaceJs : public QObject {

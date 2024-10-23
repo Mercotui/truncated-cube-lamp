@@ -1,5 +1,6 @@
 #include <QtCore/QThread>
 #include <QtCore/QtCore>
+#include <vector>
 
 #include "screen/demo/user_interface.hpp"
 #include "screen/screen_controller.hpp"

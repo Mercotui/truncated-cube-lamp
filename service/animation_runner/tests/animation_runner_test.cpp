@@ -1,7 +1,9 @@
 #include "animation_runner/animation_runner.hpp"
 
-#include <QCoreApplication>
-#include <QTimer>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QTimer>
+#include <memory>
+#include <utility>
 
 #include "animation_runner/tests/screen_controller_mock.hpp"
 #include "gmock/gmock.h"

@@ -6,6 +6,7 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
 #include <QtCore/QLoggingCategory>
+#include <unordered_set>
 
 namespace {
 constexpr auto kDefaultSaveFile = "./animations.json";

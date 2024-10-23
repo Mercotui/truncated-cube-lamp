@@ -1,6 +1,7 @@
 #include "screen/dummy_screen_controller.hpp"
 
-#include <QLoggingCategory>
+#include <QtCore/QLoggingCategory>
+#include <vector>
 
 namespace {
 constexpr int kScreenWidth = 8;

@@ -2,6 +2,7 @@
 
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QStringLiteral>
+#include <memory>
 #include <string_view>
 #include <utility>
 

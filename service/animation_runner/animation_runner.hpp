@@ -1,8 +1,6 @@
 #pragma once
 
 #include <QtCore/QDateTime>
-#include <QtCore/QObject>
-#include <QtCore/QSize>
 #include <QtCore/QTimer>
 #include <QtQml/QJSEngine>
 #include <atomic>

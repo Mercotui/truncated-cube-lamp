@@ -1,8 +1,8 @@
 #pragma once
 #include <signal.h>
 
-#include <QObject>
-#include <QSocketNotifier>
+#include <QtCore/QObject>
+#include <QtCore/QSocketNotifier>
 #include <vector>
 
 class SignalMonitor : public QObject {
