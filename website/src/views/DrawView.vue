@@ -1,3 +1,9 @@
+<script setup>
+definePage({
+  alias: ['/draw/:name'],
+})
+</script>
+
 <template>
   <v-container>
     <v-row class="text-center">

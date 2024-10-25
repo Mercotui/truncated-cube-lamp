@@ -1,31 +1,17 @@
 # website
 
-## Project setup
+The website for truncated cube lamp.
+Built using node 20.
 
-For node>16 use:
-
-```bash
-export NODE_OPTIONS=--openssl-legacy-provider
-```
-
-Then use:
+Run the site with:
 
 ```bash
 npm install
-npm run serve
-npm run build
-npm run package
-npm run lint
+npm run dev
 ```
 
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-## Deploying to other systems
-
-It might be useful to build on one system and compile on another, after building:
+Build a bundle with:
 
 ```bash
-rsync dist/ user@remote:~/truncated-cube-lamp/website/dist --recursive --delete
+npm run build
 ```

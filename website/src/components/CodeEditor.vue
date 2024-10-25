@@ -5,7 +5,7 @@
         <v-overlay :value="save_overlay_opened">
           <v-card class="mx-auto my-12" max-width="374">
             <v-card-title>Enter Script Name</v-card-title>
-            <v-text-field label="Script Name" v-model="script_name" solo></v-text-field>
+            <v-text-field label="Script Name" model-value="script_name" solo></v-text-field>
             <v-card-actions>
               <v-btn @click="save_overlay_opened = false">
                 Cancel
