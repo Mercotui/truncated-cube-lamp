@@ -1,57 +1,43 @@
 {
   "name": "truncated-website",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.0",
   "scripts": {
-    "serve": "vue-cli-service serve --mode production",
-    "serve-dev": "vue-cli-service serve --mode development",
-    "build": "vue-cli-service build",
-    "package": "tar -zcvf truncated-website-build.tar.gz -C dist .",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "axios": "^0.21.1",
-    "base-64": "^1.0.0",
-    "chroma-js": "^2.1.2",
-    "core-js": "^3.6.5",
-    "lodash": "^4.17.21",
-    "utf8": "^3.0.0",
-    "vue": "^2.6.11",
-    "vue-router": "^3.5.1",
-    "vuetify": "^2.4.0"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^5.0.0",
-    "@vue/cli-plugin-eslint": "^5.0.0",
-    "@vue/cli-service": "^5.0.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.5.0",
-    "eslint-plugin-vue": "^9.2.0",
-    "miragejs": "^0.1.41",
-    "sass": "^1.32.0",
-    "sass-loader": "^10.0.0",
-    "vue-cli-plugin-vuetify": "^2.3.1",
-    "vue-template-compiler": "^2.6.11",
-    "vue2-ace-editor": "^0.0.15",
-    "vuetify-loader": "^1.7.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not dead"
-  ]
+    "not dead",
+    "not ie 11"
+  ],
+  "dependencies": {
+    "@mdi/font": "7.4.47",
+    "axios": "^1.7.7",
+    "base-64": "^1.0.0",
+    "chroma-js": "^3.1.2",
+    "core-js": "^3.37.1",
+    "lodash": "^4.17.21",
+    "miragejs": "^0.2.0-alpha.3",
+    "roboto-fontface": "*",
+    "utf8": "^3.0.0",
+    "vue": "^3.4.31",
+    "vuetify": "^3.6.11"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.4.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "unplugin-fonts": "^1.1.1",
+    "vite": "^5.3.3",
+    "vite-plugin-vuetify": "^2.0.3",
+    "vue-router": "^4.4.0"
+  }
 }

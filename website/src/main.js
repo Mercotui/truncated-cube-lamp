@@ -1,33 +1,19 @@
-import Vue from 'vue'
+// Plugins
+import { registerPlugins } from '@/plugins'
+
+// Components
 import App from './App.vue'
-import VueRouter from 'vue-router'
 
-import vuetify from './plugins/vuetify';
-import {makeServer} from "./server"
-
-import ScriptsList from './views/ScriptsList';
-import ScriptView from './views/ScriptView';
-import DrawView from './views/DrawView';
-
-Vue.use(VueRouter)
-Vue.config.productionTip = false
-
-const router = new VueRouter({
-  routes:  [
-    { path: '/', component: ScriptsList },
-    { path: '/drawing/', component: DrawView, props: true },
-    { path: '/drawing/:name', component: DrawView, props: true },
-    { path: '/scriptview/', component: ScriptView, props: true },
-    { path: '/scriptview/:name', component: ScriptView, props: true },
-  ]
-})
+// Composables
+import { createApp } from 'vue'
+import {makeServer} from "./mock-server"
 
 if (process.env.NODE_ENV === "development") {
   makeServer()
 }
 
-new Vue({
-  router,
-  vuetify,
-  render: h => h(App)
-}).$mount('#app')
+const app = createApp(App)
+
+registerPlugins(app)
+
+app.mount('#app')
