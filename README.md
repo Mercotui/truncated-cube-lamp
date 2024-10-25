@@ -1,10 +1,10 @@
 # truncated-cube-lamp
 
-Truncated Cube Lamp: artsy remote code execution 👌
+Artsy remote code execution 👌
 
-This lamp runs javascript animations, submittable via a embedded webserver:
+This lamp runs javascript animations, submittable via an embedded webserver:
 
-View a [demo video](https://youtu.be/iKpsz_uIMqY) on youtube.
+View a [demo video](https://youtu.be/SYDldSplhB4) on YouTube.
 
 ![Rainbow!](documentation/rainbow.jpg)
 
@@ -31,7 +31,7 @@ class Animation {
 
 ## Dependencies
 
-The API backend in written in Qt, because it has a nice and easy to use Javascript engine 🤷.
+The API backend is written in Qt, because it has a nice and easy to use Javascript engine 🤷.
 
 To run this on your desktop for testing, get Qt5 devel:
 
@@ -48,7 +48,7 @@ The website requires node.js, look in the website directory for more details.
 ### Git Metarepo
 
 Some dependencies are installed as git repository by [metarepo](https://github.com/blejdfist/git-metarepo).
-Once installed, run:
+Install metarepo and run:
 
 ```bash
 git meta sync
