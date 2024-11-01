@@ -1,9 +1,3 @@
-<script setup>
-definePage({
-  alias: ['/draw/:name'],
-})
-</script>
-
 <template>
   <v-container>
     <v-row class="text-center">
@@ -11,29 +5,33 @@ definePage({
         <div class="text-center">
           <v-btn class="mx-1" elevation="2" :disabled="!save_enabled" v-on:click="save">Save</v-btn>
           <v-btn class="mx-1" elevation="2" v-on:click="save_overlay_opened = true">Save As</v-btn>
-          <v-btn class="mx-1" elevation="2" :disabled="!delete_enabled" color="error" v-on:click="delete_overlay_opened = true">Delete</v-btn>
-          <v-btn class="mx-1" :elevation="live_drawing_button_elevation" :color="live_drawing_button_color" v-on:click="live_drawing_enabled = !live_drawing_enabled">Live</v-btn>
+          <v-btn class="mx-1" elevation="2" :disabled="!delete_enabled" color="error"
+                 v-on:click="delete_overlay_opened = true">Delete
+          </v-btn>
+          <v-btn class="mx-1" :elevation="live_drawing_button_elevation" :color="live_drawing_button_color"
+                 v-on:click="live_drawing_enabled = !live_drawing_enabled">Live
+          </v-btn>
         </div>
 
         <DrawingGrid
-        v-bind:color="color"
-        v-bind:pixels="pixels"
-        v-bind:width="width"
-        v-bind:height="height"
-        @setPixel="setPixel($event)"
+          v-bind:color="color"
+          v-bind:pixels="pixels"
+          v-bind:width="width"
+          v-bind:height="height"
+          @setPixel="setPixel($event)"
         />
 
         <v-color-picker
-        class="ma-2"
-        show-swatches
-        :swatches="swatches"
-        v-model="color"
+          class="ma-2"
+          show-swatches
+          :swatches="swatches"
+          v-model="color"
         />
 
         <v-overlay :value="save_overlay_opened">
           <v-card class="mx-auto my-12" max-width="374">
             <v-card-title>Enter Script Name</v-card-title>
-            <v-text-field label="Script Name" v-model="name" solo></v-text-field>
+            <v-text-field label="Script Name" v-model="save_as_name" solo></v-text-field>
             <v-card-actions>
               <v-btn @click="save_overlay_opened = false">
                 Cancel
@@ -47,7 +45,7 @@ definePage({
 
         <v-overlay :value="delete_overlay_opened">
           <v-card class="mx-auto my-12" max-width="374">
-            <v-card-title>Delete {{name}} ?</v-card-title>
+            <v-card-title>Delete {{ name }} ?</v-card-title>
             <v-card-actions>
               <v-btn @click="delete_overlay_opened = false">
                 Cancel
@@ -83,6 +81,7 @@ export default {
   data: function () {
     return {
       save_overlay_opened: false,
+      save_as_name: name,
       delete_overlay_opened: false,
       live_drawing_enabled: true,
       width: 8,
@@ -98,13 +97,13 @@ export default {
         ['#f0f0f0', '#ff6403', '#4700a5', '#006412'],
         ['#f0f0f0', '#dd0907', '#0000d3', '#000000'],
         ['#f0f0f0', '#90713a', '#02abea', '#ffffff'],
-        ],
+      ],
     }
   },
 
   computed: {
     save_enabled: function () {
-      return !(this.type.includes("default") || this.type.includes("template") || this.name  === "")
+      return !(this.type.includes("default") || this.type.includes("template") || this.name === "")
     },
     delete_enabled: function () {
       return !(this.type.includes("default") || this.type.includes("template"))
@@ -112,12 +111,12 @@ export default {
     live_drawing_button_elevation: function () {
       return this.live_drawing_enabled ? "0" : "2";
     },
-    live_drawing_button_color: function() {
+    live_drawing_button_color: function () {
       return this.live_drawing_enabled ? "primary" : "";
     }
   },
 
-  created: function() {
+  created: function () {
     // create a debounced live drawing function
     this.debouncedDrawLive = _.debounce(this.drawLive, 1000, {maxWait: 1500, leading: true, trailing: true});
   },
@@ -143,22 +142,15 @@ export default {
       // truncate history
       this.colorHistory = this.colorHistory.slice(0, 4);
 
-      // update the color picker swatches
+      // update the color picker swatches, we put our history in first row of each swatch column
       this.colorHistory.forEach((color, index) => {
-        // turns out vue can't handle arrays.
-        // Its ok, neither could I at first, take your time.
-        var newval = this.swatches[index];
-        newval[0] = color;
-        this.$set(this.swatches, index, newval)
+        // Wow, vue3 handles array updates now!
+        this.swatches[index][0] = color;
       });
     },
 
     setPixel: function (args) {
-      // need to set array like this to notify Vue the property has changed
-      const updated_row = this.pixels[args.y];
-      updated_row[args.x] = args.color;
-      this.$set(this.pixels, args.y, updated_row);
-
+      this.pixels[args.y][args.x] = args.color;
       this.colorUsed(args.color);
 
       if (this.live_drawing_enabled) {
@@ -167,10 +159,10 @@ export default {
     },
 
     composeScript: function () {
-      var replacement_line = '    this.pixels = ['
-      for (var x = 0; x < this.width; x++) {
+      let replacement_line = '    this.pixels = [';
+      for (let x = 0; x < this.width; x++) {
         replacement_line += '['
-        for (var y = 0; y < this.height; y++) {
+        for (let y = 0; y < this.height; y++) {
           replacement_line += '"' + this.pixels[y][x] + '",'
         }
         replacement_line += '],'
@@ -178,19 +170,19 @@ export default {
       replacement_line += '];';
 
 
-      var lines = this.content.split('\n');
+      let lines = this.content.split('\n');
       lines = lines.map(line => line.includes("this.pixels = ") ? replacement_line : line);
       return lines.join('\n');
     },
 
     extractPixels: function (script) {
-      var lines = script.split('\n');
-      var pixels_string = lines.find(line => line.includes("this.pixels = "));
+      const lines = script.split('\n');
+      let pixels_string = lines.find(line => line.includes("this.pixels = "));
       pixels_string = pixels_string.split('=')[1]
-      var create_pixel_array = Function('"use strict";\nreturn ' + pixels_string);
-      var pixels = create_pixel_array();
+      const create_pixel_array = Function('"use strict";\nreturn ' + pixels_string);
+      const pixels = create_pixel_array();
 
-      if (!Array.isArray(pixels)){
+      if (!Array.isArray(pixels)) {
         console.log("script's pixel format was not array");
         return undefined
       }
@@ -202,13 +194,13 @@ export default {
       return pixels;
     },
 
-    save: function () {
-      var script = this.composeScript()
-      var bytes = utf8.encode(script);
-      var encoded_script = base64.encode(bytes);
+    save: function (save_name) {
+      const script = this.composeScript();
+      const bytes = utf8.encode(script);
+      const encoded_script = base64.encode(bytes);
 
       axios.put('/api/scripts/' + this.name + '/', {
-        name: this.name,
+        name: save_name || this.name,
         script: encoded_script,
         type: this.type,
       });
@@ -216,9 +208,9 @@ export default {
 
     saveAs: function () {
       this.save_overlay_opened = false;
-      this.type = ["image"]
-      this.save();
-      this.$router.push('/drawing/' + this.name);
+      this.type = ["image"];
+      this.save(this.save_as_name);
+      this.$router.push('/drawing/' + this.save_as_name);
     },
 
     deleteScript: function () {
@@ -228,9 +220,9 @@ export default {
     },
 
     drawLive: function () {
-      var script = this.composeScript()
-      var bytes = utf8.encode(script);
-      var encoded_script = base64.encode(bytes);
+      const script = this.composeScript();
+      const bytes = utf8.encode(script);
+      const encoded_script = base64.encode(bytes);
       const name = 'image_live_draw';
 
       axios.put('/api/scripts/' + name + '/', {

@@ -5,7 +5,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --fix --ignore-path .gitignore"
+    "lint": "eslint . --fix --ignore-path .gitignore",
+    "package": "tar -zcvf truncated-website-build.tar.gz -C dist ."
   },
   "browserslist": [
     "> 1%",
