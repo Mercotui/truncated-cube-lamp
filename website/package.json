@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "dev online": "vite -m online",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
@@ -22,6 +23,7 @@
     "core-js": "^3.37.1",
     "lodash": "^4.17.21",
     "miragejs": "^0.2.0-alpha.3",
+    "monaco-editor": "^0.52.0",
     "roboto-fontface": "*",
     "utf8": "^3.0.0",
     "vue": "^3.4.31",

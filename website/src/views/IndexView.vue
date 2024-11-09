@@ -4,7 +4,7 @@
       <v-col class="mb-4">
         <v-list dense>
           <v-list-subheader>Images</v-list-subheader>
-          <v-list-item v-on:click="openDrawing(image_template)">
+          <v-list-item :disabled="!image_template" v-on:click="openDrawing(image_template)">
             <v-list-item-title>Draw</v-list-item-title>
             <template v-slot:append>
               <v-icon>mdi-brush</v-icon>
@@ -49,33 +49,33 @@ export default {
 
   computed: {
     animations: function () {
-      var animation_scripts = this.scripts.filter(script => {
+      const animation_scripts = this.scripts.filter(script => {
         return script.type.includes("animation") && !script.type.includes("template") && !script.type.includes("temporary");
-      })
+      });
       return Array.from(animation_scripts, script => script.name).sort();
     },
     images: function () {
-      var image_scripts = this.scripts.filter(script => {
+      const image_scripts = this.scripts.filter(script => {
         return script.type.includes("image") && !script.type.includes("template") && !script.type.includes("temporary");
-      })
+      });
       return Array.from(image_scripts, script => script.name).sort();
     },
     animation_template: function () {
-      var animation_template_scripts = this.scripts.filter(script => {
+      const animation_template_scripts = this.scripts.filter(script => {
         return script.type.includes("animation") && script.type.includes("template");
-      })
+      });
       return Array.from(animation_template_scripts, script => script.name).sort()[0];
     },
     image_template: function () {
-      var image_template_scripts = this.scripts.filter(script => {
+      const image_template_scripts = this.scripts.filter(script => {
         return script.type.includes("image") && script.type.includes("template");
-      })
+      });
       return Array.from(image_template_scripts, script => script.name).sort()[0];
     }
   },
 
   mounted() {
-    axios.get('/api/scripts/').then(response => (this.scripts = response.data.scripts))
+    axios.get('/api/scripts/').then(response => (this.scripts = response.data.scripts || []))
   },
 
   methods: {
@@ -85,7 +85,7 @@ export default {
       });
     },
     openScript: function (script_name) {
-      this.$router.push('/script/' + script_name)
+      this.$router.push('/script/' + (script_name || ""))
     },
     openDrawing: function (drawing_name) {
       this.$router.push('/draw/' + drawing_name)

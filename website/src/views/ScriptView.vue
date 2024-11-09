@@ -1,14 +1,8 @@
-<script setup>
-definePage({
-  alias: ['/script/:name'],
-})
-</script>
-
 <template>
   <v-container>
     <v-row class="text-center">
       <v-col class="mb-4">
-        <CodeEditor v-bind:script_name=name @runInEmulator="runInEmulator" />
+        <CodeEditor v-bind:script_name=name @runInEmulator="runInEmulator"/>
       </v-col>
       <v-col class="mb-4">
         <LampEmulator/>
