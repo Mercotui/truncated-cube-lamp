@@ -29,12 +29,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: install dependencies
-        run: npm install
+        run: npm ci
       - name: build
         run: npm run build
       - name: package
         run: npm run package
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: truncated-cube-website
           path: website/truncated-website-build.tar.gz
