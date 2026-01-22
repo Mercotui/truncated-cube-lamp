@@ -21,7 +21,7 @@
     "base-64": "^1.0.0",
     "chroma-js": "^3.1.2",
     "core-js": "^3.45.1",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "miragejs": "^0.1.48",
     "monaco-editor": "^0.53.0",
     "roboto-fontface": "^0.10.0",
